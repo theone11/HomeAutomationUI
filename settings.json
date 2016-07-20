@@ -1,0 +1,40 @@
+﻿{
+	"LAYOUT": {
+		"TABS": [{
+			"ID": "Shades_Lights",
+			"TITLE": "תריסים ותאורה"
+		},
+		{
+			"ID": "Irrigation",
+			"TITLE": "השקייה"
+		},
+		{
+			"ID": "HVAC",
+			"TITLE": "מיזוג"
+		},
+		{
+			"ID": "Boiler",
+			"TITLE": "דוד חשמל"
+		},
+		{
+			"ID": "Sensors",
+			"TITLE": "חיישנים"
+		},
+		{
+			"ID": "Cameras",
+			"TITLE": "מצלמות"
+		},
+		{
+			"ID": "Multimedia",
+			"TITLE": "מולטימדיה"
+		},
+		{
+			"ID": "Log",
+			"TITLE": "לוג"
+		},
+		{
+			"ID": "Hardware",
+			"TITLE": "חומרה"
+		}]
+	}
+}
