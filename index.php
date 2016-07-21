@@ -4,7 +4,7 @@ ini_set('display_errors', '1');
 $cfg_file = "settings.json";
 
 if (file_exists($cfg_file)) {
-  $myJSONconfig = json_decode(utf8_encode(file_get_contents($cfg_file)), true);
+  $myJSONconfig = json_decode(file_get_contents($cfg_file), true);
   $text = file_get_contents($cfg_file);
 } else {
   $myJSONconfig = "No File Found";
@@ -48,7 +48,6 @@ if (file_exists($cfg_file)) {
         <?php foreach ($myJSONconfig["LAYOUT"]["TABS"] as $tab) { ?>
         <div id="<?php echo $tab["ID"] ?>" class="tabcontent">
           <h3><?php echo $tab["TITLE"] ?></h3>
-          <p>London is the capital city of England.</p>
         </div>
         <?php } ?>
       </div>
