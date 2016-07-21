@@ -1,36 +1,34 @@
 ﻿<?php
-
 ini_set('display_errors', '1');
 
 $cfg_file = "settings.json";
 
 if (file_exists($cfg_file)) {
-  $myJSONconfig = json_decode(file_get_contents($cfg_file), true);
+  $myJSONconfig = json_decode(utf8_encode(file_get_contents($cfg_file)), true);
+  $text = file_get_contents($cfg_file);
 } else {
   $myJSONconfig = "No File Found";
 }
-
-#$json = '{"a":1,"b":2,"c":3,"d":4,"e":5}';
-#var_dump(json_decode($json));
-#var_dump(json_decode($json, true));
 
 ?>
 
 <html>
   <head>
-    <!-- <meta charset="utf-8" /> -->
-    <meta http-equiv="content-type" content="text/html;charset=iso-8859-8-i">
-    <title>בית חכם</title>
+    <!-- iso-8859-8-i -->
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta http-equiv="content-type" content="text/xml;charset=utf-8">
+    <meta http-equiv="content-type" content="application/json;charset=utf-8">
+
+    <title>Home Automation</title>
     <link rel="stylesheet" type="text/css" href="css/MyStyles.css">
   </head>
 
   <body>
     <script src="Javascript/MyScripts.js"></script>
-    
-    myJSONconfig
-    "<?php echo $myJSONconfig ?>"
-    
-    <div>
+   <pre>
+   <?php print_r($text) ?>
+    </pre>
+    <div dir="rtl">
       <div style="width: 20%; float: right;">
         <div>
           <center>Clock</center>
@@ -53,10 +51,12 @@ if (file_exists($cfg_file)) {
           <p>London is the capital city of England.</p>
         </div>
         <?php } ?>
+      </div>
     
       <div style="width: 20%; float: right;">
         <center>Status</center>
       </div>
+    </div>
 
   </body>
 
