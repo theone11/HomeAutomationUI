@@ -1,0 +1,73 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<settings>
+  <layout>
+    <tabs>
+      <tab>
+        <id>Shades_Lights</id>
+        <title>תריסים ותאורה</title>
+      </tab>
+      <tab>
+        <id>Irrigation</id>
+        <title>השקייה</title>
+      </tab>
+      <tab>
+        <id>HVAC</id>
+        <title>מיזוג</title>
+      </tab>
+      <tab>
+        <id>Boiler</id>
+        <title>דוד חשמל</title>
+      </tab>
+      <tab>
+        <id>Sensors</id>
+        <title>חיישנים</title>
+      </tab>
+      <tab>
+        <id>Cameras</id>
+        <title>מצלמות</title>
+      </tab>
+      <tab>
+        <id>Multimedia</id>
+        <title>מולטימדיה</title>
+      </tab>
+      <tab>
+        <id>Hardware</id>
+        <title>חומרה</title>
+      </tab>
+      <tab>
+        <id>Log</id>
+        <title>לוג</title>
+      </tab>
+    </tabs>
+  </layout>
+  <elements>
+    <element>
+      <idx>1</idx>
+      <tab>Shades_Lights</tab>
+    </element>
+    <element>
+      <idx>30</idx>
+      <tab>Irrigation</tab>
+    </element>
+    <element>
+      <idx>35</idx>
+      <tab>Irrigation</tab>
+    </element>
+  </elements>
+  <hardware>
+    <component>
+      <name>Domoticz Server</name>
+      <ip>192.168.2.117</ip>
+      <port>33333</port>
+      <user>theone</user>
+      <password>greatone</password>
+    </component>
+    <component>
+      <name>MKTronic 8 Relay WEB</name>
+      <ip>192.168.2.20</ip>
+      <port>80</port>
+      <user>admin</user>
+      <password>admin</password>
+    </component>
+  </hardware>
+</settings>

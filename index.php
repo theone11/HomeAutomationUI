@@ -1,14 +1,24 @@
 ﻿<?php
 ini_set('display_errors', '1');
 
-$cfg_file = "settings.json";
+$cfg_file = "settings.xml";
 
 if (file_exists($cfg_file)) {
-  $myJSONconfig = json_decode(file_get_contents($cfg_file), true);
-  $text = file_get_contents($cfg_file);
+  $myXMLconfig = simplexml_load_file($cfg_file);
 } else {
-  $myJSONconfig = "No File Found";
+  $myXMLconfig = "No File Found";
 }
+
+$DomoticzURL = "";
+
+foreach ($myXMLconfig->hardware->component as $component) {
+  if (trim($component->name) == "Domoticz Server") {
+    $DomoticzURL = 'http://' . trim($component->user) . ':' . trim($component->password) . '@' . trim($component->ip) . ':' . trim($component->port) . '/json.htm?type=devices&filter=all&used=true&order=Name';
+    break;
+  }
+}
+
+$DomoticzData = json_decode(file_get_contents($DomoticzURL));
 
 ?>
 
@@ -21,17 +31,27 @@ if (file_exists($cfg_file)) {
 
     <title>Home Automation</title>
     <link rel="stylesheet" type="text/css" href="css/MyStyles.css">
+
+    <script src="Javascript/MyScripts.js"></script>
+    <script src="Javascript/jquery-2.1.4.js"></script>
+
   </head>
 
-  <body>
-    <script src="Javascript/MyScripts.js"></script>
-   <pre>
-   <?php print_r($text) ?>
+  <body onload="setInterval(UpdateLogData, 5000);">
+<!--
+    <pre>
+    <?php echo $DomoticzURL; ?>
+    <?php print_r($DomoticzData); ?>
+    <?php print_r($myXMLconfig); ?>
     </pre>
+-->    
     <div dir="rtl">
       <div style="width: 20%; float: right;">
         <div>
-          <center>Clock</center>
+          <center><iframe src="http://free.timeanddate.com/clock/i5amr909/n676/tlil18/tt0/th1/tb4" frameborder="0" width="167" height="36"></iframe></center>
+          <p>
+          <center>Sunrise: <?php echo $DomoticzData->Sunrise ?></center>
+          <center>Sunset: <?php echo $DomoticzData->Sunset ?></center>
         </div>
         <div>
           <center>Weather</center>
@@ -40,14 +60,36 @@ if (file_exists($cfg_file)) {
 
       <div style="width: 60%; float: right;">
         <ul class="tab">
-        <?php foreach ($myJSONconfig["LAYOUT"]["TABS"] as $tab) { ?>
-          <li><a href="#" class="tablinks" onclick="openCity(event, '<?php echo $tab["ID"] ?>')"><?php echo $tab["TITLE"] ?></a></li>
+        <?php foreach ($myXMLconfig->layout->tabs->tab as $tab) { ?>
+          <li><a href="#" class="tablinks" onclick="openTab(event, '<?php echo $tab->id ?>')"><?php echo $tab->title ?></a></li>
         <?php } ?>
         </ul>
 
-        <?php foreach ($myJSONconfig["LAYOUT"]["TABS"] as $tab) { ?>
-        <div id="<?php echo $tab["ID"] ?>" class="tabcontent">
-          <h3><?php echo $tab["TITLE"] ?></h3>
+        <?php foreach ($myXMLconfig->layout->tabs->tab as $tab) { ?>
+        <div id="<?php echo $tab->id ?>" class="tabcontent">
+          <?php switch (trim($tab->id)) {
+                  case "Hardware":
+                    foreach ($myXMLconfig->hardware->component as $component) { ?>
+                      <div id="<?php echo $component->name ?>"><?php echo $component->name . " " . $component->ip . " " . $component->port ?></div>
+                    <?php } break;
+                  case "Log": ?>
+                    <div id="Log Content" dir="ltr">
+                    </div> <?php
+                    break;
+                  default:
+                    foreach ($myXMLconfig->elements->element as $element) {
+                      #echo ($element->tab . " ". $element->idx . " " . $tab->id);
+                      $str1 = trim($element->tab);
+                      #print_r($str1);
+                      $str2 = trim($tab->id);
+                      #print_r($str2);
+                      if ($str1 == $str2) {
+                        echo trim($element->idx) . " ";
+                      }
+                      echo "<p>";
+                    }
+                }
+          ?>
         </div>
         <?php } ?>
       </div>
