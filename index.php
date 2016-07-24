@@ -32,12 +32,18 @@ $DomoticzData = json_decode(file_get_contents($DomoticzURL));
     <title>Home Automation</title>
     <link rel="stylesheet" type="text/css" href="css/MyStyles.css">
 
+    <script type='text/javascript'>
+      var DomoticzData = <?php echo json_encode($myXMLconfig); ?>;
+    </script>
     <script src="Javascript/MyScripts.js"></script>
     <script src="Javascript/jquery-2.1.4.js"></script>
 
   </head>
 
   <body onload="setInterval(UpdateLogData, 5000);">
+<!--  <body onload="setInterval( function() {UpdateLogData('<?php echo addslashes(json_encode($myXMLconfig->hardware->component[0])); ?>');}, 5000);">-->
+<!-- <body onload="setInterval( function() {UpdateLogData('\"name\"');}, 5000);"> -->
+  
 <!--
     <pre>
     <?php echo $DomoticzURL; ?>
@@ -45,10 +51,6 @@ $DomoticzData = json_decode(file_get_contents($DomoticzURL));
     <?php print_r($myXMLconfig); ?>
     </pre>
 -->    
-
-<script>
-//CheckHardware("<?php echo $cfg_file; ?>");
-</script>
 
     <div dir="rtl">
       <div style="width: 20%; float: right;">
@@ -76,7 +78,7 @@ $DomoticzData = json_decode(file_get_contents($DomoticzURL));
                   case "Hardware":
                     echo "<ul id=\"Hardware Content\" dir=\"ltr\">";
                     foreach ($myXMLconfig->hardware->component as $component) { ?>
-                      </li><div id="NAME">Name:<?php echo $component->name ?> IP:<?php echo $component->ip ?> PORT:<?php echo $component->port ?></li>
+                      <li id="<?php echo $component->name ?>">Name:<?php echo $component->name ?> IP:<?php echo $component->ip ?> PORT:<?php echo $component->port ?></li>
                     <?php } echo "</ul>"; break;
                   case "Log": ?>
                     <div id="Log Content" dir="ltr">
