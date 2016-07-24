@@ -45,6 +45,11 @@ $DomoticzData = json_decode(file_get_contents($DomoticzURL));
     <?php print_r($myXMLconfig); ?>
     </pre>
 -->    
+
+<script>
+//CheckHardware("<?php echo $cfg_file; ?>");
+</script>
+
     <div dir="rtl">
       <div style="width: 20%; float: right;">
         <div>
@@ -69,9 +74,10 @@ $DomoticzData = json_decode(file_get_contents($DomoticzURL));
         <div id="<?php echo $tab->id ?>" class="tabcontent">
           <?php switch (trim($tab->id)) {
                   case "Hardware":
+                    echo "<ul id=\"Hardware Content\" dir=\"ltr\">";
                     foreach ($myXMLconfig->hardware->component as $component) { ?>
-                      <div id="<?php echo $component->name ?>"><?php echo $component->name . " " . $component->ip . " " . $component->port ?></div>
-                    <?php } break;
+                      </li><div id="NAME">Name:<?php echo $component->name ?> IP:<?php echo $component->ip ?> PORT:<?php echo $component->port ?></li>
+                    <?php } echo "</ul>"; break;
                   case "Log": ?>
                     <div id="Log Content" dir="ltr">
                     </div> <?php
