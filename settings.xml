@@ -63,11 +63,11 @@
       <password>greatone</password>
     </component>
     <component>
-      <name>MKTronic 8 Relay WEB</name>
-      <ip>192.168.2.20</ip>
+      <name>ESP Cloud Witty 3</name>
+      <ip>192.168.2.23</ip>
       <port>80</port>
-      <user>admin</user>
-      <password>admin</password>
+      <user></user>
+      <password></password>
     </component>
   </hardware>
 </settings>
