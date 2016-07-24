@@ -19,12 +19,15 @@ function openTab(evt, tabName) {
     evt.currentTarget.className += " active";
 }
 
-function UpdateLogData() {
+function UpdateLogData(myXMLconfig) {
+    //var myXMLconfig = <?php echo $cfg_file; ?>;
+    //alert(myXMLconfig);
+
     // Declare all variables
     var DomoticzURL = "http://192.168.2.117:33333/json.htm?type=command&param=getlog"; //&jsoncallback=?
     var xhr = new XMLHttpRequest(); // From https://www.kirupa.com/html5/making_http_requests_js.htm
 
-    xhr.open('GET', "http://192.168.2.117:33333/json.htm?type=command&param=getlog", true);
+    xhr.open('GET', DomoticzURL, true);
     xhr.send();
     xhr.addEventListener("readystatechange", processRequest, false);
     
@@ -32,7 +35,7 @@ function UpdateLogData() {
       if (xhr.readyState == 4 && xhr.status == 200) {
         var response = JSON.parse(xhr.responseText);
         var logtext = "";
-        for (i = 0; i < (response.result.length); i++) {
+        for (i = (response.result.length - 1); i >= 0; i--) {
           logtext += response.result[i].message + "<br>";
         }
         document.getElementById("Log Content").innerHTML = logtext;
@@ -65,3 +68,23 @@ function UpdateLogData() {
 }
 
 
+function CheckHardware() {
+    
+//    var myXMLconfig = <?php echo $myXMLconfig; ?>;
+//    alert(myXMLconfig);
+
+    // Declare all variables
+/*     var DomoticzURL = "http://192.168.2.117:33333/"; //&jsoncallback=?
+    var xhr = new XMLHttpRequest(); // From https://www.kirupa.com/html5/making_http_requests_js.htm
+
+    
+    xhr.open('GET', DomoticzURL, true);
+    xhr.send();
+    xhr.addEventListener("readystatechange", processRequest, false);
+    
+    function processRequest(e) {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        document.getElementById("Log Content").innerHTML = logtext;
+      }
+    }*/
+}
