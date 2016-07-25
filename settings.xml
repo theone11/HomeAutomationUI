@@ -1,5 +1,11 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
 <settings>
+  <js_parameters>
+    <LogUpdateInterval>20000</LogUpdateInterval>
+    <CheckUpdateStatusInterval>5000</CheckUpdateStatusInterval>
+    <XMLHttpRequestTimeout>2000</XMLHttpRequestTimeout>
+    <DomoticzLogURL></DomoticzLogURL>
+  </js_parameters>
   <layout>
     <tabs>
       <tab>
@@ -68,6 +74,20 @@
       <port>80</port>
       <user></user>
       <password></password>
+    </component>
+    <component>
+      <name>BroadLink RM Bridge</name>
+      <ip>192.168.2.60</ip>
+      <port>7474</port>
+      <user></user>
+      <password></password>
+    </component>
+    <component>
+      <name>MKTronic LAN Ethernet IP 8 channels WEB Relay board</name>
+      <ip>192.168.2.20</ip>
+      <port>80</port>
+      <user>admin</user>
+      <password>admin</password>
     </component>
   </hardware>
 </settings>
