@@ -1,94 +1,136 @@
 function onloadIntervals() {
-  UpdateLogData();
+  UpdateDomoticzData();
+  UpdateDomoticzLog();
   CheckHardwareStatus();
-  setInterval(UpdateLogData, myXMLconfig.js_parameters.LogUpdateInterval);
+  setInterval(UpdateDomoticzLog, myXMLconfig.js_parameters.LogUpdateInterval);
+  setInterval(UpdateDomoticzData, myXMLconfig.js_parameters.DataUpdateInterval);
   setInterval(CheckHardwareStatus, myXMLconfig.js_parameters.CheckUpdateStatusInterval);
 }
 
 function openTab(evt, tabName) {
-    // Declare all variables
-    var i, tabcontent, tablinks;
-    // Get all elements with class="tabcontent" and hide them
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    // Get all elements with class="tablinks" and remove the class "active"
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    // Show the current tab, and add an "active" class to the link that opened the tab
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
+ 
+  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
+
+  // Declare all variables
+  var i, tabcontent, tablinks;
+  // Get all elements with class="tabcontent" and hide them
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+  }
+  // Get all elements with class="tablinks" and remove the class "active"
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  // Show the current tab, and add an "active" class to the link that opened the tab
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
 }
 
-function UpdateLogData() {
-  console.log("UpdateLogData " + Math.round(new Date().getTime()/1000));
-  // Declare all variables
-  var DomoticzLogURL = "http://192.168.2.117:33333/json.htm?type=command&param=getlog"; //&jsoncallback=?
-  //var DomoticzLogURL = myXMLconfig.js_parameters.DomoticzLogURL;
-  var xhr = new XMLHttpRequest(); // From https://www.kirupa.com/html5/making_http_requests_js.htm
 
-  xhr.open('GET', DomoticzLogURL, true);
-  xhr.timeout = myXMLconfig.js_parameters.XMLHttpRequestTimeout;
-  xhr.send();
-  xhr.addEventListener("readystatechange", processRequest, false);
+function UpdateDomoticzData(){
+
+  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
   
-  function processRequest(e) {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-      var response = JSON.parse(xhr.responseText);
+  var DomoticzDataURL = 'http://' + myXMLconfig.server.domoticz.ip + ':' + myXMLconfig.server.domoticz.port + myXMLconfig.server.domoticz.dataURL;
+  console.log(DomoticzDataURL);
+
+//  $.getJSON(DomoticzDataURL, {format: "json"}, function(data) {DomoticzDataAnalyze(data);});
+
+   $.ajax({
+          url: DomoticzDataURL,
+          dataType: "json",
+          async: true,
+          timeout: ((myXMLconfig.server.domoticz.timeout == "") ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : myXMLconfig.server.domoticz.timeout),
+          success: function(data) {DomoticzDataAnalyze(data);},
+          error: function () {}
+        });
+
+  function DomoticzDataAnalyze(json) {
+    //console.log(json);
+    if (json.status == "OK") {
+      document.getElementById("sunrise").innerHTML = "Sunrise " + json.Sunrise;
+      document.getElementById("sunset").innerHTML = "Sunset " + json.Sunset;
+    } else {
+      document.getElementById("sunrise").innerHTML = "Sunrise error";
+      document.getElementById("sunset").innerHTML = "Sunset error";
+    }
+    //console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
+  }
+}
+
+
+function UpdateDomoticzLog() {
+
+  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
+  
+  var DomoticzLogURL = 'http://' + myXMLconfig.server.domoticz.ip + ':' + myXMLconfig.server.domoticz.port + myXMLconfig.server.domoticz.logURL;
+  console.log(DomoticzLogURL);
+
+//  $.getJSON(DomoticzLogURL, {format: "json"}, function(data) {DomoticzLogAnalyze(data);});
+
+  $.ajax({
+          url: DomoticzLogURL,
+          dataType: "json",
+          async: true,
+          timeout: ((myXMLconfig.server.domoticz.timeout == "") ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : myXMLconfig.server.domoticz.timeout),
+          success: function(data) {DomoticzLogAnalyze(data);},
+          error: function () {
+                   document.getElementById("Domoticz Server" + "_Status").style.color = "red";
+                   document.getElementById("Log Content").innerHTML = "Server could not be reached";
+                 }
+        });
+
+  function DomoticzLogAnalyze(json) {
+    //console.log(json);
+    if (json.status == "OK") {
+      document.getElementById("Domoticz Server" + "_Status").style.color = "lightgreen";
       var logtext = "";
-      for (i = (response.result.length - 1); i >= 0; i--) {
-        logtext += response.result[i].message + "<br>";
+      for (i = (json.result.length - 1); i >= 0; i--) {
+        logtext += json.result[i].message + "<br>";
       }
       document.getElementById("Log Content").innerHTML = logtext;
+    } else {
+      document.getElementById("Domoticz Server" + "_Status").style.color = "red";
+      document.getElementById("Log Content").innerHTML = "Server returned Status = " + json.status;
     }
+    console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
   }
 }
 
-function logResults(json){
-  //console.log(json);
-  //console.log(json.code);
-  if (json.code == 0) {
-    document.getElementById("BroadLink RM Bridge" + "_Status").style.color = "lightgreen";
-  } else {
-    document.getElementById("BroadLink RM Bridge" + "_Status").style.color = "red";
-  }
-}
 
 function CheckHardwareStatus() {
 
-  // From http://stackoverflow.com/questions/25220486/xmlhttprequest-in-for-loop
-  // and http://stackoverflow.com/questions/24773307/sending-post-request-in-for-loop/24774532#24774532
-  
-  console.log("CheckHardwareStatus " + Math.round(new Date().getTime()/1000));
+  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
+
   //console.log(myXMLconfig.hardware.component.length);
   for(var i = 0; i < myXMLconfig.hardware.component.length; i++) {
-    switch (myXMLconfig.hardware.component[i].name) {
-      case "MKTronic LAN Ethernet IP 8 channels WEB Relay board" :
-        //console.log('http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + ' ' + Math.round(new Date().getTime()/1000));
+    //console.log(myXMLconfig.hardware.component[i].type);
+    switch (myXMLconfig.hardware.component[i].type) {
+      case "MKTronic LAN Relay Board" :
+        //console.log('http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + ' ' + Math.round(new Date().getTime()) + ' [ms]');
         break;
-      case "BroadLink RM Bridge" :
-        //console.log('http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + '/?cmd=' + encodeURI(JSON.stringify({api_id:1000, command:'registered_devices'})) + '&callback=logResults' + ' ' + Math.round(new Date().getTime()/1000));
-        $.ajax({  // From https://www.sitepoint.com/jsonp-examples/
-          url: 'http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + '/?cmd=' + encodeURI(JSON.stringify({api_id:1001, command:'probe_devices'})) + '&callback=logResults',
+      case "Broadlink RM Bridge" :
+        //console.log('http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + '/?cmd=' + encodeURI(JSON.stringify({api_id:1000, command:'registered_devices'})) + '&callback=BroadlinkDataAnalyze' + ' ' + Math.round(new Date().getTime()) + ' [ms]');
+        $.ajax({
+          url: 'http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + '/?cmd=' + encodeURI(JSON.stringify({api_id:1001, command:'probe_devices'})) + '&callback=BroadlinkDataAnalyze',
           dataType: "jsonp",
-          jsonpCallback: "logResults"
+          timeout: ((myXMLconfig.hardware.component[i].timeout == "") ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : myXMLconfig.hardware.component[i].timeout),
+          jsonpCallback: "BroadlinkDataAnalyze"
         });
         break;
       default :
         (function(i) {
           var xhr = new XMLHttpRequest();
-            //console.log('http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + ' ' + Math.round(new Date().getTime()/1000));
+            //console.log('http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + ' ' + Math.round(new Date().getTime()) + ' [ms]');
             xhr.open("GET", 'http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port, true);
-          xhr.onreadystatechange = function () {
+            xhr.onreadystatechange = function () {
             if ((xhr.readyState == 4) && (xhr.status == 200)) {
-              //alert(JSON.parse(xhr.responseText));
               //console.log(myXMLconfig.hardware.component[i].name + "_Status");
               document.getElementById(myXMLconfig.hardware.component[i].name + "_Status").style.color = "lightgreen";
             } else {
-              //console.log(myXMLconfig.hardware.component[i].name + "_Status2");
+              //console.log(myXMLconfig.hardware.component[i].name + "_Status (else)");
               document.getElementById(myXMLconfig.hardware.component[i].name + "_Status").style.color = "red";
             }
           };
@@ -97,32 +139,14 @@ function CheckHardwareStatus() {
         })(i);
     }
   }
+}
 
-/*
 
-  // From https://bbs.archlinux.org/viewtopic.php?id=58640
-  
-  console.log(myXMLconfig.hardware.component.length);
-  var xhr = new Array(myXMLconfig.hardware.component.length);
-  for(var i = 0; i < myXMLconfig.hardware.component.length; i++) {
-    xhr[i] = new XMLHttpRequest();
-    console.log("http://" + myXMLconfig.hardware.component[i].ip + ":" + myXMLconfig.hardware.component[i].port)
-    xhr[i].open("GET", "http://" + myXMLconfig.hardware.component[i].ip + ":" + myXMLconfig.hardware.component[i].port, true);
-    xhr[i].onreadystatechange = function () {
-      function responsef(index) {
-        console.log(index);
-        if ((xhr[index].readtState == 4) && (xhr[index].status == 200)) {
-          console.log(myXMLconfig.hardware.component[index].name + "_Status");
-          document.getElementById(myXMLconfig.hardware.component[index].name + "_Status").style.color = "green";
-        } else {
-          console.log(myXMLconfig.hardware.component[index].name + "_Status2");
-          document.getElementById(myXMLconfig.hardware.component[0].name + "_Status").style.color = "red";
-        }
-      }
-    }(i);
-    xhr[i].timeout = 2000;
-    xhr[i].send();
-    console.log(xhr[i]);
+function BroadlinkDataAnalyze(json){
+  //console.log(json);
+  if (json.code == 0) {
+    document.getElementById("Broadlink RM Bridge" + "_Status").style.color = "lightgreen";
+  } else {
+    document.getElementById("Broadlink RM Bridge" + "_Status").style.color = "red";
   }
-*/
 }

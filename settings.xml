@@ -1,10 +1,16 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
+
+<!-- Hardware Components !!! Must !!! have a unique NAME -->
+<!-- Hardware Components TIMEOUT can be left empty "" and then the global timeout will be used -->
+
 <settings>
   <js_parameters>
     <LogUpdateInterval>20000</LogUpdateInterval>
-    <CheckUpdateStatusInterval>5000</CheckUpdateStatusInterval>
+    <DataUpdateInterval>3000</DataUpdateInterval>
+    <CheckUpdateStatusInterval>30000</CheckUpdateStatusInterval>
     <XMLHttpRequestTimeout>2000</XMLHttpRequestTimeout>
     <DomoticzLogURL></DomoticzLogURL>
+    <DomoticzDataURL></DomoticzDataURL>
   </js_parameters>
   <layout>
     <tabs>
@@ -60,34 +66,46 @@
       <tab>Irrigation</tab>
     </element>
   </elements>
-  <hardware>
-    <component>
+  <server>
+    <domoticz>
       <name>Domoticz Server</name>
+      <type>Domoticz Server</type>
       <ip>192.168.2.117</ip>
       <port>33333</port>
-      <user>theone</user>
-      <password>greatone</password>
-    </component>
+      <user></user>
+      <password></password>
+      <timeout></timeout>
+      <logURL>/json.htm?type=command&amp;param=getlog&amp;jsoncallback=?</logURL>
+      <dataURL>/json.htm?type=devices&amp;filter=all&amp;used=true&amp;order=Name&amp;jsoncallback=?</dataURL>
+    </domoticz>
+  </server>
+  <hardware>
     <component>
-      <name>ESP Cloud Witty 3</name>
+      <name>ESP Cloud Witty #3</name>
+      <type>ESP Easy</type>
       <ip>192.168.2.23</ip>
       <port>80</port>
       <user></user>
       <password></password>
+      <timeout>2000</timeout>
     </component>
     <component>
-      <name>BroadLink RM Bridge</name>
+      <name>Broadlink RM Bridge</name>
+      <type>Broadlink RM Bridge</type>
       <ip>192.168.2.60</ip>
       <port>7474</port>
       <user></user>
       <password></password>
+      <timeout>2000</timeout>
     </component>
     <component>
-      <name>MKTronic LAN Ethernet IP 8 channels WEB Relay board</name>
+      <name>MKTronic LAN Ethernet IP 8 Channels WEB Relay Board</name>
+      <type>MKTronic LAN Relay Board</type>
       <ip>192.168.2.20</ip>
       <port>80</port>
       <user>admin</user>
       <password>admin</password>
+      <timeout>2000</timeout>
     </component>
   </hardware>
 </settings>

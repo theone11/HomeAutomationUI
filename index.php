@@ -8,18 +8,6 @@ if (file_exists($cfg_file)) {
 } else {
   $myXMLconfig = "No File Found";
 }
-
-$DomoticzURL = "";
-
-foreach ($myXMLconfig->hardware->component as $component) {
-  if (trim($component->name) == "Domoticz Server") {
-    $DomoticzURL = 'http://' . trim($component->user) . ':' . trim($component->password) . '@' . trim($component->ip) . ':' . trim($component->port) . '/json.htm?type=devices&filter=all&used=true&order=Name';
-    break;
-  }
-}
-
-$DomoticzData = json_decode(file_get_contents($DomoticzURL));
-
 ?>
 
 <html>
@@ -33,8 +21,7 @@ $DomoticzData = json_decode(file_get_contents($DomoticzURL));
     <link rel="stylesheet" type="text/css" href="css/MyStyles.css">
 
     <script type='text/javascript'>
-      var DomoticzData = <?php echo json_encode($DomoticzData); ?>;
-      var myXMLconfig = <?php echo json_encode($myXMLconfig); ?>;
+        var myXMLconfig = <?php echo json_encode($myXMLconfig); ?>;
     </script>
     <script src="Javascript/MyScripts.js"></script>
     <script src="Javascript/jquery-2.1.4.js"></script>
@@ -42,24 +29,14 @@ $DomoticzData = json_decode(file_get_contents($DomoticzURL));
   </head>
 
   <body onload="onloadIntervals();">
-<!--  <body onload="setInterval( function() {UpdateLogData('<?php echo addslashes(json_encode($myXMLconfig->hardware->component[0])); ?>');}, 5000);">-->
-<!-- <body onload="setInterval( function() {UpdateLogData('\"name\"');}, 5000);"> -->
-  
-<!--
-    <pre>
-    <?php echo $DomoticzURL; ?>
-    <?php print_r($DomoticzData); ?>
-    <?php print_r($myXMLconfig); ?>
-    </pre>
--->    
 
     <div dir="rtl">
       <div style="width: 20%; float: right;">
         <div>
           <center><iframe src="http://free.timeanddate.com/clock/i5amr909/n676/tlil18/tt0/th1/tb4" frameborder="0" width="167" height="36"></iframe></center>
           <p>
-          <center>Sunrise: <?php echo $DomoticzData->Sunrise ?></center>
-          <center>Sunset: <?php echo $DomoticzData->Sunset ?></center>
+          <center id="sunrise"></center>
+          <center id="sunset"></center>
         </div>
         <div>
           <center>Weather</center>
@@ -78,6 +55,9 @@ $DomoticzData = json_decode(file_get_contents($DomoticzURL));
           <?php switch (trim($tab->id)) {
                   case "Hardware":
                     echo "<ul id=\"Hardware Content\" dir=\"ltr\">";
+                    foreach ($myXMLconfig->server->domoticz as $component) { ?>
+                      <li id="<?php echo $component->name . "_Status"; ?>">Name:<?php echo $component->name ?> IP:<?php echo $component->ip ?> PORT:<?php echo $component->port ?></li>
+                    <?php }
                     foreach ($myXMLconfig->hardware->component as $component) { ?>
                       <li id="<?php echo $component->name . "_Status"; ?>">Name:<?php echo $component->name ?> IP:<?php echo $component->ip ?> PORT:<?php echo $component->port ?></li>
                     <?php } echo "</ul>"; break;
