@@ -34,7 +34,7 @@ function UpdateDomoticzData(){
   console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
   
   var DomoticzDataURL = 'http://' + myXMLconfig.server.domoticz.ip + ':' + myXMLconfig.server.domoticz.port + myXMLconfig.server.domoticz.dataURL;
-  console.log(DomoticzDataURL);
+  //console.log(DomoticzDataURL);
 
 //  $.getJSON(DomoticzDataURL, {format: "json"}, function(data) {DomoticzDataAnalyze(data);});
 
@@ -66,7 +66,7 @@ function UpdateDomoticzLog() {
   console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
   
   var DomoticzLogURL = 'http://' + myXMLconfig.server.domoticz.ip + ':' + myXMLconfig.server.domoticz.port + myXMLconfig.server.domoticz.logURL;
-  console.log(DomoticzLogURL);
+  //console.log(DomoticzLogURL);
 
 //  $.getJSON(DomoticzLogURL, {format: "json"}, function(data) {DomoticzLogAnalyze(data);});
 
@@ -105,7 +105,7 @@ function CheckHardwareStatus() {
   console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
 
   //console.log(myXMLconfig.hardware.component.length);
-  for(var i = 0; i < myXMLconfig.hardware.component.length; i++) {
+  for (var i = 0; i < myXMLconfig.hardware.component.length; i++) {
     //console.log(myXMLconfig.hardware.component[i].type);
     switch (myXMLconfig.hardware.component[i].type) {
       case "MKTronic LAN Relay Board" :
@@ -114,10 +114,16 @@ function CheckHardwareStatus() {
       case "Broadlink RM Bridge" :
         //console.log('http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + '/?cmd=' + encodeURI(JSON.stringify({api_id:1000, command:'registered_devices'})) + '&callback=BroadlinkDataAnalyze' + ' ' + Math.round(new Date().getTime()) + ' [ms]');
         $.ajax({
-          url: 'http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + '/?cmd=' + encodeURI(JSON.stringify({api_id:1001, command:'probe_devices'})) + '&callback=BroadlinkDataAnalyze',
+          url: 'http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + '/?cmd=' + encodeURI(JSON.stringify({api_id:1001, command:'probe_devices'})),
           dataType: "jsonp",
+          async: true,
           timeout: ((myXMLconfig.hardware.component[i].timeout == "") ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : myXMLconfig.hardware.component[i].timeout),
-          jsonpCallback: "BroadlinkDataAnalyze"
+          indexValue: i,
+          success: function(data) {BroadlinkProbeDevices(data, this.indexValue);},
+          error: function () {
+              document.getElementById(myXMLconfig.hardware.component[i].type + "_Status").style.color = "red"; 
+              document.getElementById(myXMLconfig.hardware.component[i].type + "_Status").removeChild(document.getElementById(myXMLconfig.hardware.component[i].type + "_Nodes"));
+            }
         });
         break;
       default :
@@ -141,12 +147,51 @@ function CheckHardwareStatus() {
   }
 }
 
+function BroadlinkProbeDevices(json, i){
 
-function BroadlinkDataAnalyze(json){
+  //console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
+
   //console.log(json);
   if (json.code == 0) {
-    document.getElementById("Broadlink RM Bridge" + "_Status").style.color = "lightgreen";
+    $.ajax({
+      url: 'http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + '/?cmd=' + encodeURI(JSON.stringify({api_id:1000, command:'registered_devices'})),
+      dataType: "jsonp",
+      async: true,
+      timeout: ((myXMLconfig.hardware.component[i].timeout == "") ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : myXMLconfig.hardware.component[i].timeout),
+      indexValue: i,
+      success: function(data) {BroadlinkRegisteredDevices(data, this.indexValue);},
+      error: function () {
+          document.getElementById(myXMLconfig.hardware.component[i].type + "_Status").style.color = "red";
+          document.getElementById(myXMLconfig.hardware.component[i].type + "_Status").removeChild(document.getElementById(myXMLconfig.hardware.component[i].type + "_Nodes"));
+        }
+    });
   } else {
-    document.getElementById("Broadlink RM Bridge" + "_Status").style.color = "red";
+    document.getElementById(myXMLconfig.hardware.component[i].type + "_Status").style.color = "red";
+    document.getElementById(myXMLconfig.hardware.component[i].type + "_Status").removeChild(document.getElementById(myXMLconfig.hardware.component[i].type + "_Nodes"));
+  }
+}
+
+function BroadlinkRegisteredDevices(json, i){
+
+  //console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
+
+  //console.log(json);
+  if (json.code == 0) {
+    document.getElementById(myXMLconfig.hardware.component[i].type + "_Status").style.color = "lightgreen";
+    if (document.getElementById(myXMLconfig.hardware.component[i].type + "_Nodes") != null) {
+      document.getElementById(myXMLconfig.hardware.component[i].type + "_Status").removeChild(document.getElementById(myXMLconfig.hardware.component[i].type + "_Nodes"));
+    }
+    var newNode = document.createElement("ul");
+    newNode.id = myXMLconfig.hardware.component[i].type + "_Nodes"
+    document.getElementById(myXMLconfig.hardware.component[i].type + "_Status").appendChild(newNode);
+    for (var j = 0; j < json.list.length; j++) {
+      var newNode = document.createElement("li");
+      newNode.id = myXMLconfig.hardware.component[i].type + " " + j;
+      document.getElementById(myXMLconfig.hardware.component[i].type + "_Nodes").appendChild(newNode);
+      document.getElementById(myXMLconfig.hardware.component[i].type + " " + j).innerHTML = "Name: " + json.list[j].name + " MAC: " + json.list[j].mac;
+    }
+  } else {
+    document.getElementById(myXMLconfig.hardware.component[i].type + "_Status").style.color = "red";
+    document.getElementById(myXMLconfig.hardware.component[i].type + "_Status").removeChild(document.getElementById(myXMLconfig.hardware.component[i].type + "_Nodes"));
   }
 }
