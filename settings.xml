@@ -5,9 +5,8 @@
 
 <settings>
   <js_parameters>
-    <LogUpdateInterval>20000</LogUpdateInterval>
-    <DataUpdateInterval>3000</DataUpdateInterval>
-    <CheckUpdateStatusInterval>30000</CheckUpdateStatusInterval>
+    <CheckHardwareStatusInterval>30000</CheckHardwareStatusInterval>
+    <UpdateDomoticzLogInterval>20000</UpdateDomoticzLogInterval>
     <XMLHttpRequestTimeout>2000</XMLHttpRequestTimeout>
   </js_parameters>
   <layout>
@@ -64,8 +63,8 @@
       <tab>Irrigation</tab>
     </element>
   </elements>
-  <server>
-    <domoticz>
+  <hardware>
+    <component>
       <name>Domoticz Server</name>
       <type>Domoticz Server</type>
       <ip>192.168.2.117</ip>
@@ -75,9 +74,16 @@
       <timeout></timeout>
       <logURL>/json.htm?type=command&amp;param=getlog&amp;jsoncallback=?</logURL>
       <dataURL>/json.htm?type=devices&amp;filter=all&amp;used=true&amp;order=Name&amp;jsoncallback=?</dataURL>
-    </domoticz>
-  </server>
-  <hardware>
+    </component>
+    <component>
+      <name>LMS</name>
+      <type>Logitech Media Server</type>
+      <ip>192.168.2.117</ip>
+      <port>9000</port>
+      <user></user>
+      <password></password>
+      <timeout>2000</timeout>
+    </component>
     <component>
       <name>ESP Cloud Witty #3</name>
       <type>ESP Easy</type>
