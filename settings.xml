@@ -49,29 +49,29 @@
       </tab>
     </tabs>
   </layout>
-  <elements>
-    <element>
+  <devices>
+    <device>
       <idx>1</idx>
       <tab>Shades_Lights</tab>
-    </element>
-    <element>
+    </device>
+    <device>
       <idx>30</idx>
       <tab>Irrigation</tab>
-    </element>
-    <element>
+    </device>
+    <device>
       <idx>35</idx>
       <tab>Irrigation</tab>
-    </element>
-  </elements>
+    </device>
+  </devices>
   <hardware>
     <component>
       <name>Domoticz Server</name>
       <type>Domoticz Server</type>
-      <ip>192.168.2.117</ip>
-      <port>33333</port>
+      <ip>192.168.2.19</ip>
+      <port>8080</port>
       <user></user>
       <password></password>
-      <timeout></timeout>
+      <timeout>3000</timeout>
       <logURL>/json.htm?type=command&amp;param=getlog&amp;jsoncallback=?</logURL>
       <dataURL>/json.htm?type=devices&amp;filter=all&amp;used=true&amp;order=Name&amp;jsoncallback=?</dataURL>
     </component>
@@ -82,7 +82,7 @@
       <port>9000</port>
       <user></user>
       <password></password>
-      <timeout>2000</timeout>
+      <timeout>3000</timeout>
     </component>
     <component>
       <name>ESP Cloud Witty #3</name>
@@ -91,7 +91,7 @@
       <port>80</port>
       <user></user>
       <password></password>
-      <timeout>2000</timeout>
+      <timeout>3000</timeout>
     </component>
     <component>
       <name>Broadlink RM Bridge</name>
@@ -100,7 +100,7 @@
       <port>7474</port>
       <user></user>
       <password></password>
-      <timeout>2000</timeout>
+      <timeout>3000</timeout>
     </component>
     <component>
       <name>MKTronic LAN Ethernet IP 8 Channels WEB Relay Board</name>
@@ -109,7 +109,7 @@
       <port>80</port>
       <user>admin</user>
       <password>admin</password>
-      <timeout>2000</timeout>
+      <timeout>3000</timeout>
     </component>
   </hardware>
 </settings>

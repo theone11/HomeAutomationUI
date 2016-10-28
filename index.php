@@ -49,41 +49,7 @@ if (file_exists($cfg_file)) {
         </div>
       </div>
 
-      <div style="width: 60%; float: right;">
-        <ul class="tab">
-        <?php foreach ($myXMLconfig->layout->tabs->tab as $tab) { ?>
-          <li><a href="#" class="tablinks" onclick="openTab(event, '<?php echo $tab->id ?>')"><?php echo $tab->title ?></a></li>
-        <?php } ?>
-        </ul>
-
-        <?php foreach ($myXMLconfig->layout->tabs->tab as $tab) { ?>
-        <div id="<?php echo $tab->id ?>" class="tabcontent">
-          <?php switch (trim($tab->id)) {
-                  case "Hardware":
-                    echo "<ul id=\"Hardware Content\" dir=\"ltr\">";
-                    foreach ($myXMLconfig->hardware->component as $component) { ?>
-                      <li id="<?php echo $component->name . "_Status"; ?>">Name:<?php echo $component->name ?> IP:<?php echo $component->ip ?> PORT:<?php echo $component->port ?></li>
-                    <?php } echo "</ul>"; break;
-                  case "Log": ?>
-                    <div id="Log Content" dir="ltr">
-                    </div> <?php
-                    break;
-                  default:
-                    foreach ($myXMLconfig->elements->element as $element) {
-                      #echo ($element->tab . " ". $element->idx . " " . $tab->id);
-                      $str1 = trim($element->tab);
-                      #print_r($str1);
-                      $str2 = trim($tab->id);
-                      #print_r($str2);
-                      if ($str1 == $str2) {
-                        echo trim($element->idx) . " ";
-                      }
-                      echo "<p>";
-                    }
-                }
-          ?>
-        </div>
-        <?php } ?>
+      <div id="tabs_div" style="width: 60%; float: right;">
       </div>
     
       <div style="width: 20%; float: right;">
