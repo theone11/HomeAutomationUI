@@ -21,7 +21,7 @@ function CreateHTML () {
   newLIST.className = "tab";
   DIVtabs.appendChild(newLIST);
 
-  console.log(myXMLconfig.layout.tabs.tab.length);
+  //console.log(myXMLconfig.layout.tabs.tab.length);
   for (i = 0; i < myXMLconfig.layout.tabs.tab.length; i++) {
     // Create new Tab Element
     var newLISTitem = document.createElement("li");
@@ -48,7 +48,7 @@ function CreateHTML () {
         newLIST.id = "Hardware_List";
         newLIST.dir = "ltr";
         document.getElementById(myXMLconfig.layout.tabs.tab[i].id).appendChild(newLIST); //Append Hardware List to tab content (div)
-        console.log(myXMLconfig.hardware.component.length);
+        //console.log(myXMLconfig.hardware.component.length);
         for (j = 0; j < myXMLconfig.hardware.component.length; j++) {
           // Create new Hardware Element
           var newLISTitem = document.createElement("li");
@@ -63,17 +63,31 @@ function CreateHTML () {
         newDIV.dir = "ltr";
         document.getElementById(myXMLconfig.layout.tabs.tab[i].id).appendChild(newDIV);
         break;
+      case "Multimedia":
+        for (j = 0; j < myXMLconfig.hardware.component.length; j++) {
+          if (myXMLconfig.hardware.component[j].type == "Logitech Media Server") {
+            var newIFRAME = document.createElement("iframe");
+            newIFRAME.id = "Logitech Media Server";
+            newIFRAME.src = "http://" + myXMLconfig.hardware.component[j].ip + ":" + myXMLconfig.hardware.component[j].port;
+            newIFRAME.align = "middle";
+            newIFRAME.height = 820;
+            newIFRAME.width = 720;
+            document.getElementById(myXMLconfig.layout.tabs.tab[i].id).appendChild(newIFRAME);
+          }
+        }
+        break;
       default:
         var newDIV = document.createElement("div");
         newDIV.id = "DIV_" + myXMLconfig.layout.tabs.tab[i].id;
         newDIV.dir = "ltr";
         document.getElementById(myXMLconfig.layout.tabs.tab[i].id).appendChild(newDIV);
-        console.log(myXMLconfig.devices.device.length);
+        //console.log(myXMLconfig.devices.device.length);
         for (j = 0; j < myXMLconfig.devices.device.length; j++) {
-          console.log(myXMLconfig.devices[j].device.tab + " / " + myXMLconfig.layout.tabs.tab[i].id);
-          if (myXMLconfig.devices[j].tab == myXMLconfig.layout.tabs.tab[i].id) {
+          //console.log(myXMLconfig.devices.device[j].tab + " / " + myXMLconfig.layout.tabs.tab[i].id);
+          if (myXMLconfig.devices.device[j].tab == myXMLconfig.layout.tabs.tab[i].id) {
             var newP = document.createElement("p");
-            newP.id = "IDX_" + myXMLconfig.devices[j].device.idx;
+            newP.id = "IDX_" + myXMLconfig.devices.device[j].idx;
+            newP.innerHTML = myXMLconfig.devices.device[j].idx + " : " + myXMLconfig.devices.device[j].label
             document.getElementById("DIV_" + myXMLconfig.layout.tabs.tab[i].id).appendChild(newP);
           }
         }

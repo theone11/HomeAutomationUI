@@ -53,14 +53,42 @@
     <device>
       <idx>1</idx>
       <tab>Shades_Lights</tab>
+      <label>ויטרינה</label>
     </device>
     <device>
       <idx>30</idx>
-      <tab>Irrigation</tab>
+      <tab>Shades_Lights</tab>
+      <label>חדר אוכל</label>
     </device>
     <device>
       <idx>35</idx>
+      <tab>Shades_Lights</tab>
+      <label>סלון</label>
+    </device>
+    <device>
+      <idx>50</idx>
+      <tab>Shades_Lights</tab>
+      <label>אלה</label>
+    </device>
+    <device>
+      <idx>56</idx>
+      <tab>Shades_Lights</tab>
+      <label>נגה מערבי</label>
+    </device>
+    <device>
+      <idx>21</idx>
       <tab>Irrigation</tab>
+      <label>ממטרות מערב</label>
+    </device>
+    <device>
+      <idx>22</idx>
+      <tab>Irrigation</tab>
+      <label>ממטרות צפון</label>
+    </device>
+    <device>
+      <idx>23</idx>
+      <tab>Irrigation</tab>
+      <label>טפטפות</label>
     </device>
   </devices>
   <hardware>
