@@ -1,7 +1,9 @@
 function onloadIntervals() {
   CreateHTML();
+  CheckDeviceStatus();
   CheckHardwareStatus();
   UpdateDomoticzLog();
+  setInterval(CheckDeviceStatus, myXMLconfig.js_parameters.CheckDeviceStatusInterval);
   setInterval(UpdateDomoticzLog, myXMLconfig.js_parameters.UpdateDomoticzLogInterval);
   setInterval(CheckHardwareStatus, myXMLconfig.js_parameters.CheckHardwareStatusInterval);
   //console.log(myXMLconfig);
@@ -22,12 +24,16 @@ function CreateHTML () {
   DIVtabs.appendChild(newLIST);
 
   //console.log(myXMLconfig.layout.tabs.tab.length);
-  for (i = 0; i < myXMLconfig.layout.tabs.tab.length; i++) {
+  for (i = 0; i < myXMLconfig.layout.tabs.tab.length; i++) { // Create tabs according to settings.xml
     // Create new Tab Element
     var newLISTitem = document.createElement("li");
     newLISTitem.id = "tab_li_" + i;
     document.getElementById("tabs_list").appendChild(newLISTitem); //Append new tab to list
     //Create new Tab element name - Header Name
+    var newIMG = document.createElement("IMG");
+    newIMG.id = "IMG_tab_icon_" + i;
+    newIMG.src = myXMLconfig.layout.tabs.tab[i].imagesrc_icon;
+    document.getElementById("tab_li_" + i).appendChild(newIMG);
     var newA = document.createElement("a");
     newA.id = "tab_a_" + i;
     newA.className = "tablinks";
@@ -41,7 +47,7 @@ function CreateHTML () {
     newTAB.className = "tabcontent";
     DIVtabs.appendChild(newTAB); //Append content to tab
     
-    switch(myXMLconfig.layout.tabs.tab[i].id) {
+    switch(myXMLconfig.layout.tabs.tab[i].id) { // Create elements inside each tab according to the tab type "ID"
       case "Hardware":
         // Create Hardware list element
         var newLIST = document.createElement("ul");
@@ -76,6 +82,70 @@ function CreateHTML () {
           }
         }
         break;
+      case "Shades_Lights":
+        var newDIV = document.createElement("div");
+        newDIV.id = "DIV_" + myXMLconfig.layout.tabs.tab[i].id;
+        newDIV.dir = "rtl";
+        document.getElementById(myXMLconfig.layout.tabs.tab[i].id).appendChild(newDIV);
+        //console.log(myXMLconfig.devices.device.length);
+        for (j = 0; j < myXMLconfig.devices.device.length; j++) {
+          //console.log(myXMLconfig.devices.device[j].tab + " / " + myXMLconfig.layout.tabs.tab[i].id);
+          if (myXMLconfig.devices.device[j].tab == myXMLconfig.layout.tabs.tab[i].id) {
+            var newDIV = document.createElement("div");
+            newDIV.id = "DIV_IDX_" + myXMLconfig.devices.device[j].idx;
+            newDIV.className = "Shades_DIV";
+            document.getElementById("DIV_" + myXMLconfig.layout.tabs.tab[i].id).appendChild(newDIV);
+            var newP = document.createElement("p");
+            newP.id = "P_IDX_" + myXMLconfig.devices.device[j].idx;
+            newP.innerHTML = myXMLconfig.devices.device[j].idx + " " + myXMLconfig.devices.device[j].label
+            document.getElementById("DIV_IDX_" + myXMLconfig.devices.device[j].idx).appendChild(newP);
+            var newIMG = document.createElement("IMG");
+            newIMG.id = "IMG_OPEN_IDX_" + myXMLconfig.devices.device[j].idx;
+            newIMG.src = myXMLconfig.layout.tabs.tab[i].imagesrc_open;
+            document.getElementById("DIV_IDX_" + myXMLconfig.devices.device[j].idx).appendChild(newIMG);
+            var newDIV = document.createElement("div");
+            newDIV.id = "DIV_SLIDER_IDX_" + myXMLconfig.devices.device[j].idx;
+            newDIV.className = "Slider_Container_DIV";
+            document.getElementById("DIV_IDX_" + myXMLconfig.devices.device[j].idx).appendChild(newDIV);
+            var newSlider = document.createElement("INPUT");
+            newSlider.id = "SLIDER_IDX_" + myXMLconfig.devices.device[j].idx;
+            newSlider.setAttribute("type", "range");
+            newSlider.setAttribute("orient", "vertical");
+            document.getElementById("DIV_SLIDER_IDX_" + myXMLconfig.devices.device[j].idx).appendChild(newSlider);
+            var newIMG = document.createElement("IMG");
+            newIMG.id = "IMG_CLOSE_IDX_" + myXMLconfig.devices.device[j].idx;
+            newIMG.src = myXMLconfig.layout.tabs.tab[i].imagesrc_close;
+            document.getElementById("DIV_IDX_" + myXMLconfig.devices.device[j].idx).appendChild(newIMG);
+            var newP = document.createElement("p");
+            document.getElementById("DIV_IDX_" + myXMLconfig.devices.device[j].idx).appendChild(newP);
+            var newIMG = document.createElement("IMG");
+            newIMG.id = "IMG_STOP_IDX_" + myXMLconfig.devices.device[j].idx;
+            newIMG.src = myXMLconfig.layout.tabs.tab[i].imagesrc_stop;
+            document.getElementById("DIV_IDX_" + myXMLconfig.devices.device[j].idx).appendChild(newIMG);
+          }
+        }
+        break;
+      case "Irrigation":
+        var newDIV = document.createElement("div");
+        newDIV.id = "DIV_" + myXMLconfig.layout.tabs.tab[i].id;
+        newDIV.dir = "rtl";
+        document.getElementById(myXMLconfig.layout.tabs.tab[i].id).appendChild(newDIV);
+        //console.log(myXMLconfig.devices.device.length);
+        for (j = 0; j < myXMLconfig.devices.device.length; j++) {
+          //console.log(myXMLconfig.devices.device[j].tab + " / " + myXMLconfig.layout.tabs.tab[i].id);
+          if (myXMLconfig.devices.device[j].tab == myXMLconfig.layout.tabs.tab[i].id) {
+            var newDIV = document.createElement("div");
+            newDIV.id = "DIV_IDX" + myXMLconfig.devices.device[j].idx;
+            newDIV.style.cssFloat = 'right';
+            newDIV.style.styleFloat = 'right'; // IE
+            document.getElementById("DIV_" + myXMLconfig.layout.tabs.tab[i].id).appendChild(newDIV);
+            var newP = document.createElement("p");
+            newP.id = "IDX_" + myXMLconfig.devices.device[j].idx;
+            newP.innerHTML = myXMLconfig.devices.device[j].idx + " : " + myXMLconfig.devices.device[j].label
+            document.getElementById("DIV_IDX" + myXMLconfig.devices.device[j].idx).appendChild(newP);
+          }
+        }
+        break;
       default:
         var newDIV = document.createElement("div");
         newDIV.id = "DIV_" + myXMLconfig.layout.tabs.tab[i].id;
@@ -95,7 +165,6 @@ function CreateHTML () {
     }
   }
 }
-
 
 function openTab(evt, tabName) {
  
@@ -168,6 +237,73 @@ function UpdateDomoticzLog() {
   }
 }
 
+function CheckDeviceStatus() {
+  
+  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
+
+  //console.log(myXMLconfig.hardware.component.length);
+  for (var i = 0; i < myXMLconfig.hardware.component.length; i++) {
+    //console.log(myXMLconfig.hardware.component[i].type);
+    switch (myXMLconfig.hardware.component[i].type) {
+      case "Domoticz Server" :
+        //console.log('http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + myXMLconfig.hardware.component[i].dataURL);
+        //$.getJSON(DomoticzDataURL, {format: "json"}, function(data) {DomoticzDataAnalyze(data);});
+        $.ajax({
+          url: 'http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + myXMLconfig.hardware.component[i].dataURL,
+          dataType: "json",
+          async: true,
+          timeout: ((Object.keys(myXMLconfig.hardware.component[i].timeout).length === 0 && myXMLconfig.hardware.component[i].timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : myXMLconfig.hardware.component[i].timeout),
+          indexValue: i,
+          success: function(data) {DomoticzDeviceAnalyze(data, this.indexValue);},
+          error: function () { document.getElementById(myXMLconfig.hardware.component[this.indexValue].type + "_Status").style.color = "red";  }
+        });
+      case "MKTronic LAN Relay Board" :
+        break;
+      case "Broadlink RM Bridge" :
+        break;
+      default :
+        break;
+    }
+  }
+}
+
+function DomoticzDeviceAnalyze(json, i) {
+
+  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
+
+  //console.log(json);
+
+  for (k = 0; k < myXMLconfig.layout.tabs.tab.length; k++) {
+    switch(myXMLconfig.layout.tabs.tab[k].id) { // Create elements inside each tab according to the tab type "ID"
+      case "Shades_Lights":
+        for (j = 0; j < myXMLconfig.devices.device.length; j++) {
+          if (myXMLconfig.devices.device[j].tab == myXMLconfig.layout.tabs.tab[k].id) {
+            index = json.result.findIndex(x => x.idx==myXMLconfig.devices.device[j].idx);
+            //console.log(index);
+            if (index > -1) {
+              //console.log(json.result[index].Level);
+              if (json.result[index].Level < 50) {
+                //console.log("IMG_OPEN_IDX_" + myXMLconfig.devices.device[j].idx);
+                document.getElementById("IMG_OPEN_IDX_" + myXMLconfig.devices.device[j].idx).src = myXMLconfig.layout.tabs.tab[k].imagesrc_open_select;
+                document.getElementById("IMG_CLOSE_IDX_" + myXMLconfig.devices.device[j].idx).src = myXMLconfig.layout.tabs.tab[k].imagesrc_close;
+              }
+              else {
+                //console.log("IMG_CLOSE_IDX_" + myXMLconfig.devices.device[j].idx);
+                document.getElementById("IMG_OPEN_IDX_" + myXMLconfig.devices.device[j].idx).src = myXMLconfig.layout.tabs.tab[k].imagesrc_open;
+                document.getElementById("IMG_CLOSE_IDX_" + myXMLconfig.devices.device[j].idx).src = myXMLconfig.layout.tabs.tab[k].imagesrc_close_select;
+              }
+              document.getElementById("SLIDER_IDX_" + myXMLconfig.devices.device[j].idx).value = 100 - json.result[index].Level;
+            }
+          }
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms] - End');
+}
 
 function CheckHardwareStatus() {
 
@@ -230,7 +366,7 @@ function CheckHardwareStatus() {
 
 function DomoticzDataAnalyze(json, i) {
 
-  //console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
+  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
 
   //console.log(json);
   if (json.status == "OK") {

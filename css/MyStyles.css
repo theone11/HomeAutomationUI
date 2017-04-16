@@ -52,3 +52,27 @@ ul.tab li a:focus, .active {background-color: #ccc;}
     from {opacity: 0;}
     to {opacity: 1;}
 }
+
+/* Shades_Lights Container */
+.Shades_DIV {
+  float: right;
+  text-align:center;
+  width: 100px;
+  overflow: hidden;
+}
+
+/* Vertical Slider container for centering slider horizontally*/
+.Slider_Container_DIV {
+  margin:auto;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Vertical Slider */
+input[type=range][orient=vertical] {
+    writing-mode: bt-lr; /* IE */
+    -webkit-appearance: slider-vertical; /* WebKit */
+    width: 8px;
+    height: 175px;
+    padding: 0 5px;
+}

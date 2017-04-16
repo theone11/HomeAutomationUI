@@ -7,6 +7,7 @@
   <js_parameters>
     <CheckHardwareStatusInterval>30000</CheckHardwareStatusInterval>
     <UpdateDomoticzLogInterval>20000</UpdateDomoticzLogInterval>
+    <CheckDeviceStatusInterval>3000</CheckDeviceStatusInterval>
     <XMLHttpRequestTimeout>2000</XMLHttpRequestTimeout>
   </js_parameters>
   <layout>
@@ -14,38 +15,52 @@
       <tab>
         <id>Shades_Lights</id>
         <title>תריסים ותאורה</title>
+        <imagesrc_icon>images/blinds.png</imagesrc_icon>
+        <imagesrc_open>images/blindsopen48.png</imagesrc_open>
+        <imagesrc_close>images/blinds48.png</imagesrc_close>
+        <imagesrc_open_select>images/blindsopen48sel.png</imagesrc_open_select>
+        <imagesrc_close_select>images/blinds48sel.png</imagesrc_close_select>
+        <imagesrc_stop>images/blindsstop.png</imagesrc_stop>
       </tab>
       <tab>
         <id>Irrigation</id>
         <title>השקייה</title>
+        <imagesrc></imagesrc>
       </tab>
       <tab>
         <id>HVAC</id>
         <title>מיזוג</title>
+        <imagesrc></imagesrc>
       </tab>
       <tab>
         <id>Boiler</id>
         <title>דוד חשמל</title>
+        <imagesrc></imagesrc>
       </tab>
       <tab>
         <id>Sensors</id>
         <title>חיישנים</title>
+        <imagesrc></imagesrc>
       </tab>
       <tab>
         <id>Cameras</id>
         <title>מצלמות</title>
+        <imagesrc></imagesrc>
       </tab>
       <tab>
         <id>Multimedia</id>
         <title>מולטימדיה</title>
+        <imagesrc></imagesrc>
       </tab>
       <tab>
         <id>Hardware</id>
         <title>חומרה</title>
+        <imagesrc></imagesrc>
       </tab>
       <tab>
         <id>Log</id>
         <title>לוג</title>
+        <imagesrc_icon>images/log.png</imagesrc_icon>
       </tab>
     </tabs>
   </layout>
@@ -56,14 +71,19 @@
       <label>ויטרינה</label>
     </device>
     <device>
+    <device>
+      <idx>35</idx>
+      <tab>Shades_Lights</tab>
+      <label>סלון</label>
+    </device>
       <idx>30</idx>
       <tab>Shades_Lights</tab>
       <label>חדר אוכל</label>
     </device>
     <device>
-      <idx>35</idx>
+      <idx>63</idx>
       <tab>Shades_Lights</tab>
-      <label>סלון</label>
+      <label>חדר שישי</label>
     </device>
     <device>
       <idx>50</idx>
@@ -74,6 +94,11 @@
       <idx>56</idx>
       <tab>Shades_Lights</tab>
       <label>נגה מערבי</label>
+    </device>
+    <device>
+      <idx>69</idx>
+      <tab>Shades_Lights</tab>
+      <label>נגה צפוני</label>
     </device>
     <device>
       <idx>21</idx>
