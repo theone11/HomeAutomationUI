@@ -15,6 +15,7 @@
       <tab>
         <id>Shades_Lights</id>
         <title>תריסים ותאורה</title>
+        <direction>rtl</direction>
         <imagesrc_icon>images/blinds.png</imagesrc_icon>
         <imagesrc_open>images/blindsopen48.png</imagesrc_open>
         <imagesrc_close>images/blinds48.png</imagesrc_close>
@@ -25,41 +26,42 @@
       <tab>
         <id>Irrigation</id>
         <title>השקייה</title>
-        <imagesrc></imagesrc>
+        <direction>rtl</direction>
       </tab>
       <tab>
         <id>HVAC</id>
         <title>מיזוג</title>
-        <imagesrc></imagesrc>
+        <direction>rtl</direction>
       </tab>
       <tab>
         <id>Boiler</id>
         <title>דוד חשמל</title>
-        <imagesrc></imagesrc>
+        <direction>rtl</direction>
       </tab>
       <tab>
         <id>Sensors</id>
         <title>חיישנים</title>
-        <imagesrc></imagesrc>
+        <direction>rtl</direction>
       </tab>
       <tab>
         <id>Cameras</id>
         <title>מצלמות</title>
-        <imagesrc></imagesrc>
+        <direction>rtl</direction>
       </tab>
       <tab>
         <id>Multimedia</id>
         <title>מולטימדיה</title>
-        <imagesrc></imagesrc>
+        <direction>rtl</direction>
       </tab>
       <tab>
         <id>Hardware</id>
         <title>חומרה</title>
-        <imagesrc></imagesrc>
+        <direction>ltr</direction>
       </tab>
       <tab>
         <id>Log</id>
         <title>לוג</title>
+        <direction>ltr</direction>
         <imagesrc_icon>images/log.png</imagesrc_icon>
       </tab>
     </tabs>
