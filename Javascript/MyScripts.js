@@ -89,6 +89,7 @@ function CreateHTML () {
         document.getElementById(myXMLconfig.layout.tabs.tab[i].id).appendChild(newDIV);
         //console.log(myXMLconfig.devices.device.length);
         for (j = 0; j < myXMLconfig.devices.device.length; j++) {
+          (function(j) {
           //console.log(myXMLconfig.devices.device[j].tab + " / " + myXMLconfig.layout.tabs.tab[i].id);
           if (myXMLconfig.devices.device[j].tab == myXMLconfig.layout.tabs.tab[i].id) {
             var newDIV = document.createElement("div");
@@ -101,6 +102,7 @@ function CreateHTML () {
             document.getElementById("DIV_IDX_" + myXMLconfig.devices.device[j].idx).appendChild(newP);
             var newIMG = document.createElement("IMG");
             newIMG.id = "IMG_OPEN_IDX_" + myXMLconfig.devices.device[j].idx;
+            newIMG.addEventListener("click", function(){ ChangeBlindState(myXMLconfig.devices.device[j].idx, "OPEN", 0); }, false);
             newIMG.src = myXMLconfig.layout.tabs.tab[i].imagesrc_open;
             document.getElementById("DIV_IDX_" + myXMLconfig.devices.device[j].idx).appendChild(newIMG);
             var newDIV = document.createElement("div");
@@ -110,19 +112,23 @@ function CreateHTML () {
             var newSlider = document.createElement("INPUT");
             newSlider.id = "SLIDER_IDX_" + myXMLconfig.devices.device[j].idx;
             newSlider.setAttribute("type", "range");
+            newSlider.onchange = function(){ ChangeBlindState(myXMLconfig.devices.device[j].idx, "LEVEL", newSlider.value); };
             newSlider.setAttribute("orient", "vertical");
             document.getElementById("DIV_SLIDER_IDX_" + myXMLconfig.devices.device[j].idx).appendChild(newSlider);
             var newIMG = document.createElement("IMG");
             newIMG.id = "IMG_CLOSE_IDX_" + myXMLconfig.devices.device[j].idx;
+            newIMG.onclick = function(){ ChangeBlindState(myXMLconfig.devices.device[j].idx, "CLOSE", 0); };
             newIMG.src = myXMLconfig.layout.tabs.tab[i].imagesrc_close;
             document.getElementById("DIV_IDX_" + myXMLconfig.devices.device[j].idx).appendChild(newIMG);
             var newP = document.createElement("p");
             document.getElementById("DIV_IDX_" + myXMLconfig.devices.device[j].idx).appendChild(newP);
             var newIMG = document.createElement("IMG");
             newIMG.id = "IMG_STOP_IDX_" + myXMLconfig.devices.device[j].idx;
+            newIMG.onclick = function(){ ChangeBlindState(myXMLconfig.devices.device[j].idx, "STOP", 0); };
             newIMG.src = myXMLconfig.layout.tabs.tab[i].imagesrc_stop;
             document.getElementById("DIV_IDX_" + myXMLconfig.devices.device[j].idx).appendChild(newIMG);
           }
+        } (j));
         }
         break;
       case "Irrigation":
@@ -426,3 +432,44 @@ function BroadlinkRegisteredDevices(json, i) {
     document.getElementById(myXMLconfig.hardware.component[i].type + "_Status").removeChild(document.getElementById(myXMLconfig.hardware.component[i].type + "_Nodes"));
   }
 }
+
+function ChangeBlindState(idx, command, level) {
+
+  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms] - ' + idx + "/" + command + "/" + level);
+  
+  var jsoncommand = "";
+  
+  switch (command) {
+    case "OPEN":
+      jsoncommand = 'http://' + '192.168.2.19' + ':' + '8080' + '/json.htm?type=command'+'&param=switchlight&idx=' + idx + '&switchcmd=On';
+      document.getElementById("commandline").innerHTML = jsoncommand;
+      break;
+    case "CLOSE":
+      jsoncommand = 'http://' + '192.168.2.19' + ':' + '8080' + '/json.htm?type=command'+'&param=switchlight&idx=' + idx + '&switchcmd=Off';
+      document.getElementById("commandline").innerHTML = jsoncommand;
+      break;
+    case "STOP":
+      jsoncommand = 'http://' + '192.168.2.19' + ':' + '8080' + '/json.htm?type=command'+'&param=switchlight&idx=' + idx + '&switchcmd=Set%20Level&level=' + (100-level);
+      document.getElementById("commandline").innerHTML = jsoncommand;
+      break;
+    case "LEVEL":
+      jsoncommand = 'http://' + '192.168.2.19' + ':' + '8080' + '/json.htm?type=command'+'&param=switchlight&idx=' + idx + '&switchcmd=Set%20Level&level=' + (100-level);
+      document.getElementById("commandline").innerHTML = jsoncommand;
+      break;
+    default:
+      break;
+  }
+  console.log(jsoncommand);
+/*      
+  $.ajax({
+    url: 'http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + myXMLconfig.hardware.component[i].dataURL,
+    dataType: "json",
+    async: true,
+    timeout: ((Object.keys(myXMLconfig.hardware.component[i].timeout).length === 0 && myXMLconfig.hardware.component[i].timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : myXMLconfig.hardware.component[i].timeout),
+    indexValue: i,
+    success: function(data) {DomoticzDataAnalyze(data, this.indexValue);},
+    error: function () { document.getElementById(myXMLconfig.hardware.component[this.indexValue].type + "_Status").style.color = "red";  }
+  });
+*/
+}
+

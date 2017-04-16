@@ -56,6 +56,8 @@ if (file_exists($cfg_file)) {
     
       <div style="width: 20%; float: right;">
         <center>Status</center>
+        <center></center>
+        <center id="commandline"></center>
       </div>
     </div>
 

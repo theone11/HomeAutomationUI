@@ -67,51 +67,61 @@
   <devices>
     <device>
       <idx>1</idx>
+      <type>Domoticz Server</type>
       <tab>Shades_Lights</tab>
       <label>ויטרינה</label>
     </device>
     <device>
     <device>
       <idx>35</idx>
+      <type>Domoticz Server</type>
       <tab>Shades_Lights</tab>
       <label>סלון</label>
     </device>
       <idx>30</idx>
+      <type>Domoticz Server</type>
       <tab>Shades_Lights</tab>
       <label>חדר אוכל</label>
     </device>
     <device>
       <idx>63</idx>
+      <type>Domoticz Server</type>
       <tab>Shades_Lights</tab>
       <label>חדר שישי</label>
     </device>
     <device>
       <idx>50</idx>
+      <type>Domoticz Server</type>
       <tab>Shades_Lights</tab>
       <label>אלה</label>
     </device>
     <device>
       <idx>56</idx>
+      <type>Domoticz Server</type>
       <tab>Shades_Lights</tab>
       <label>נגה מערבי</label>
     </device>
     <device>
       <idx>69</idx>
+      <type>Domoticz Server</type>
       <tab>Shades_Lights</tab>
       <label>נגה צפוני</label>
     </device>
     <device>
       <idx>21</idx>
+      <type>Domoticz Server</type>
       <tab>Irrigation</tab>
       <label>ממטרות מערב</label>
     </device>
     <device>
       <idx>22</idx>
+      <type>Domoticz Server</type>
       <tab>Irrigation</tab>
       <label>ממטרות צפון</label>
     </device>
     <device>
       <idx>23</idx>
+      <type>Domoticz Server</type>
       <tab>Irrigation</tab>
       <label>טפטפות</label>
     </device>
@@ -127,6 +137,9 @@
       <timeout>3000</timeout>
       <logURL>/json.htm?type=command&amp;param=getlog&amp;jsoncallback=?</logURL>
       <dataURL>/json.htm?type=devices&amp;filter=all&amp;used=true&amp;order=Name&amp;jsoncallback=?</dataURL>
+      <SwitchOnURL>/json.htm?type=command&amp;param=switchlight&amp;idx=REPLACE_IDX&amp;switchcmd=On</SwitchOnURL>
+      <SwitchOffURL>/json.htm?type=command&amp;param=switchlight&amp;idx=REPLACE_IDX&amp;switchcmd=Off</SwitchOffURL>
+      <SwitchSetURL>/json.htm?type=command&amp;param=switchlight&amp;idx=REPLACE_IDX&amp;switchcmd=Set%20Level&amp;level=REPLACE_LEVEL</SwitchSetURL>
     </component>
     <component>
       <name>LMS</name>
