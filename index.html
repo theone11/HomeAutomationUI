@@ -1,16 +1,4 @@
-﻿<?php
-ini_set('display_errors', '1');
-
-$cfg_file = "settings.xml";
-
-if (file_exists($cfg_file)) {
-  $myXMLconfig = simplexml_load_file($cfg_file);
-} else {
-  $myXMLconfig = "No File Found";
-}
-?>
-
-<html>
+﻿<html>
   <head>
     <!-- iso-8859-8-i -->
     <meta http-equiv="content-type" content="text/html;charset=utf-8">
@@ -20,9 +8,7 @@ if (file_exists($cfg_file)) {
     <title>Home Automation</title>
     <link rel="stylesheet" type="text/css" href="css/MyStyles.css">
 
-    <script type='text/javascript'>
-        var myXMLconfig = <?php echo json_encode($myXMLconfig); ?>;
-    </script>
+    <script src="settings.js"></script>
     <script src="Javascript/MyScripts.js"></script>
     <script src="Javascript/jquery-2.1.4.js"></script>
 

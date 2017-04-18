@@ -1,4 +1,8 @@
+var myXMLconfig = JSON.parse(data);
+  
 function onloadIntervals() {
+  //console.log(data);
+  console.log(myXMLconfig);
   CreateHTML();
   CheckDeviceStatus();
   CheckHardwareStatus();
@@ -11,7 +15,6 @@ function onloadIntervals() {
 
 
 function CreateHTML () {
-
   console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
 
   //Create new DIV for tabs
@@ -96,7 +99,7 @@ function CreateHTML () {
             //Create IMG for every device OPEN
             var newIMG = document.createElement("IMG");
             newIMG.id = "IMG_OPEN_IDX_" + device.idx;
-            newIMG.addEventListener("click", function(){ ChangeBlindState(device.idx, "OPEN", 0); }, false);
+            newIMG.addEventListener("click", function(){ ChangeBlindState(device.type, device.idx, "OPEN", 0); }, false);
             newIMG.src = tab.imagesrc_open;
             document.getElementById("DIV_IDX_" + device.idx).appendChild(newIMG);
             //Create DIV for every device slider
@@ -108,13 +111,13 @@ function CreateHTML () {
             var newSlider = document.createElement("INPUT");
             newSlider.id = "SLIDER_IDX_" + device.idx;
             newSlider.setAttribute("type", "range");
-            newSlider.onchange = function(){ ChangeBlindState(device.idx, "LEVEL", newSlider.value); };
+            newSlider.onchange = function(){ ChangeBlindState(device.type, device.idx, "LEVEL", newSlider.value); };
             newSlider.setAttribute("orient", "vertical");
             document.getElementById("DIV_SLIDER_IDX_" + device.idx).appendChild(newSlider);
             //Create IMG for every device CLOSE
             var newIMG = document.createElement("IMG");
             newIMG.id = "IMG_CLOSE_IDX_" + device.idx;
-            newIMG.onclick = function(){ ChangeBlindState(device.idx, "CLOSE", 0); };
+            newIMG.onclick = function(){ ChangeBlindState(device.type, device.idx, "CLOSE", 0); };
             newIMG.src = tab.imagesrc_close;
             document.getElementById("DIV_IDX_" + device.idx).appendChild(newIMG);
             //Create P for every device (space)
@@ -123,7 +126,7 @@ function CreateHTML () {
             //Create IMG for every device STOP
             var newIMG = document.createElement("IMG");
             newIMG.id = "IMG_STOP_IDX_" + device.idx;
-            newIMG.onclick = function(){ ChangeBlindState(device.idx, "STOP", 0); };
+            newIMG.onclick = function(){ ChangeBlindState(device.type, device.idx, "STOP", 0); };
             newIMG.src = tab.imagesrc_stop;
             document.getElementById("DIV_IDX_" + device.idx).appendChild(newIMG);
           }
@@ -161,10 +164,9 @@ function CreateHTML () {
   });
 }
 
-function openTab(evt, tabName) {
- 
-  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
 
+function openTab(evt, tabName) {
+  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
   // Declare all variables
   var i, tabcontent, tablinks;
   // Get all elements with class="tabcontent" and hide them
@@ -184,9 +186,7 @@ function openTab(evt, tabName) {
 
 
 function UpdateDomoticzLog() {
-
   console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
-  
   var index;
   var DomoticzLogURL = "";
   for (i = 0; i < myXMLconfig.hardware.component.length; i++) {
@@ -213,9 +213,7 @@ function UpdateDomoticzLog() {
         });
 
   function DomoticzLogAnalyze(json, index) {
-
     //console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
-
     //console.log(json);
     if (json.status == "OK") {
       document.getElementById(myXMLconfig.hardware.component[index].type + "_Status").style.color = "lightgreen";
@@ -232,11 +230,9 @@ function UpdateDomoticzLog() {
   }
 }
 
-function CheckDeviceStatus() {
-  
-  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
 
-  //console.log(myXMLconfig.hardware.component.length);
+function CheckDeviceStatus() {
+  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
   for (var i = 0; i < myXMLconfig.hardware.component.length; i++) {
     //console.log(myXMLconfig.hardware.component[i].type);
     switch (myXMLconfig.hardware.component[i].type) {
@@ -262,12 +258,10 @@ function CheckDeviceStatus() {
   }
 }
 
+
 function DomoticzDeviceAnalyze(json, i) {
-
   console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
-
   //console.log(json);
-
   for (k = 0; k < myXMLconfig.layout.tabs.tab.length; k++) {
     switch(myXMLconfig.layout.tabs.tab[k].id) { // Create elements inside each tab according to the tab type "ID"
       case "Shades_Lights":
@@ -300,11 +294,9 @@ function DomoticzDeviceAnalyze(json, i) {
   console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms] - End');
 }
 
+
 function CheckHardwareStatus() {
-
   console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
-
-  //console.log(myXMLconfig.hardware.component.length);
   for (var i = 0; i < myXMLconfig.hardware.component.length; i++) {
     //console.log(myXMLconfig.hardware.component[i].type);
     switch (myXMLconfig.hardware.component[i].type) {
@@ -359,10 +351,9 @@ function CheckHardwareStatus() {
   }
 }
 
+
 function DomoticzDataAnalyze(json, i) {
-
   console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
-
   //console.log(json);
   if (json.status == "OK") {
     document.getElementById("sunrise").innerHTML = "Sunrise " + json.Sunrise;
@@ -373,10 +364,9 @@ function DomoticzDataAnalyze(json, i) {
   }
 }
 
+
 function BroadlinkProbeDevices(json, i) {
-
   //console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
-
   //console.log(json);
   if (json.code == 0) {
     $.ajax({
@@ -397,10 +387,9 @@ function BroadlinkProbeDevices(json, i) {
   }
 }
 
+
 function BroadlinkRegisteredDevices(json, i) {
-
   //console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
-
   //console.log(json);
   if (json.code == 0) {
     document.getElementById(myXMLconfig.hardware.component[i].type + "_Status").style.color = "lightgreen";
@@ -422,43 +411,68 @@ function BroadlinkRegisteredDevices(json, i) {
   }
 }
 
-function ChangeBlindState(idx, command, level) {
 
+function ChangeBlindState(type, idx, command, level) {
   console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms] - ' + idx + "/" + command + "/" + level);
-  
   var jsoncommand = "";
+  var i = myXMLconfig.hardware.component.findIndex(x => x.type==type);
+  var component = myXMLconfig.hardware.component[i];
+  console.log(component);
   
   switch (command) {
     case "OPEN":
-      jsoncommand = 'http://' + '192.168.2.19' + ':' + '8080' + '/json.htm?type=command'+'&param=switchlight&idx=' + idx + '&switchcmd=On';
+      jsoncommand = 'http://' + component.ip + ':' + component.port + component.SwitchOffURL.replace("REPLACE_IDX", idx);
       document.getElementById("commandline").innerHTML = jsoncommand;
+      DomoticzSendJSONCommand(jsoncommand, component);
       break;
     case "CLOSE":
-      jsoncommand = 'http://' + '192.168.2.19' + ':' + '8080' + '/json.htm?type=command'+'&param=switchlight&idx=' + idx + '&switchcmd=Off';
+      jsoncommand = 'http://' + component.ip + ':' + component.port + component.SwitchOnURL.replace("REPLACE_IDX", idx);
       document.getElementById("commandline").innerHTML = jsoncommand;
+      DomoticzSendJSONCommand(jsoncommand, component);
       break;
     case "STOP":
-      jsoncommand = 'http://' + '192.168.2.19' + ':' + '8080' + '/json.htm?type=command'+'&param=switchlight&idx=' + idx + '&switchcmd=Set%20Level&level=' + (100-level);
-      document.getElementById("commandline").innerHTML = jsoncommand;
+      jsoncommand = 'http://' + component.ip + ':' + component.port + component.SwitchGetURL.replace("REPLACE_IDX", idx);
+      $.ajax({
+        url: jsoncommand,
+        dataType: "json",
+        async: true,
+        timeout: ((Object.keys(component.timeout).length === 0 && component.timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : component.timeout),
+        success: function(data) {
+                   jsoncommand = component.SwitchSetURL.replace("REPLACE_IDX", idx);
+                   jsoncommand = 'http://' + component.ip + ':' + component.port + jsoncommand.replace("REPLACE_LEVEL", (data.result[0].Level));
+                   document.getElementById("commandline").innerHTML = data.status + " " + data.result[0].Level + " " + jsoncommand;
+                   DomoticzSendJSONCommand(jsoncommand, component);
+                 },
+        error: function () { document.getElementById("commandline").innerHTML = "fail"; }
+      });
       break;
     case "LEVEL":
-      jsoncommand = 'http://' + '192.168.2.19' + ':' + '8080' + '/json.htm?type=command'+'&param=switchlight&idx=' + idx + '&switchcmd=Set%20Level&level=' + (100-level);
+      jsoncommand = component.SwitchSetURL.replace("REPLACE_IDX", idx);
+      jsoncommand = 'http://' + component.ip + ':' + component.port + jsoncommand.replace("REPLACE_LEVEL", (100-level));
       document.getElementById("commandline").innerHTML = jsoncommand;
+      DomoticzSendJSONCommand(jsoncommand, component);
       break;
     default:
       break;
   }
-  console.log(jsoncommand);
-/*      
+}
+
+
+function DomoticzSendJSONCommand(jsoncommand, component) {
+  //console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
+  //console.log(jsoncommand + " " + i);
   $.ajax({
-    url: 'http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + myXMLconfig.hardware.component[i].dataURL,
+    url: jsoncommand,
     dataType: "json",
     async: true,
-    timeout: ((Object.keys(myXMLconfig.hardware.component[i].timeout).length === 0 && myXMLconfig.hardware.component[i].timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : myXMLconfig.hardware.component[i].timeout),
-    indexValue: i,
-    success: function(data) {DomoticzDataAnalyze(data, this.indexValue);},
-    error: function () { document.getElementById(myXMLconfig.hardware.component[this.indexValue].type + "_Status").style.color = "red";  }
+    timeout: ((Object.keys(component.timeout).length === 0 && component.timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : component.timeout),
+    success: function(data) {
+               if (data.status == "OK")
+                 document.getElementById("commandline").style.color = "lightgreen";
+               else
+                 document.getElementById("commandline").style.color = "red";
+             },
+    error: function () { document.getElementById("commandline").style.color = "red"; }
   });
-*/
 }
 
