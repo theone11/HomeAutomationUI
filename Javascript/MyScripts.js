@@ -1,58 +1,111 @@
 var myXMLconfig = JSON.parse(data);
   
 function onloadIntervals() {
-  //console.log(data);
   console.log(myXMLconfig);
   CreateHTML();
-  CheckDeviceStatus();
-  CheckHardwareStatus();
-  UpdateDomoticzLog();
-  setInterval(CheckDeviceStatus, myXMLconfig.js_parameters.CheckDeviceStatusInterval);
-  setInterval(UpdateDomoticzLog, myXMLconfig.js_parameters.UpdateDomoticzLogInterval);
-  setInterval(CheckHardwareStatus, myXMLconfig.js_parameters.CheckHardwareStatusInterval);
-  console.log(myXMLconfig);
+  //CheckDeviceStatus();
+  //CheckHardwareStatus();
+  //UpdateDomoticzLog();
+  //setInterval(CheckDeviceStatus, myXMLconfig.js_parameters.CheckDeviceStatusInterval);
+  //setInterval(UpdateDomoticzLog, myXMLconfig.js_parameters.UpdateDomoticzLogInterval);
+  //setInterval(CheckHardwareStatus, myXMLconfig.js_parameters.CheckHardwareStatusInterval);
 }
 
 
 function CreateHTML () {
   console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
 
-  //Create new DIV for tabs
+  // Create new DIV for tabs
   var DIVtabs = document.getElementById("tabs_div");
 
-  //Create List Parent Element
+  // Create List Parent Element
   var newLIST = document.createElement("ul");
   newLIST.id = "tabs_list";
   newLIST.className = "tab";
   DIVtabs.appendChild(newLIST);
 
-  // Create tabs according to settings.xml
-  myXMLconfig.tabs.forEach(function(tab, i) {
-    // Create new Tab Element
-    var newLISTitem = document.createElement("li");
-    newLISTitem.id = "tab_li_" + i;
-    document.getElementById("tabs_list").appendChild(newLISTitem); //Append new tab to list
-    //Create new Tab element name - Header Name
-    var newIMG = document.createElement("IMG");
-    newIMG.id = "IMG_tab_icon_" + i;
-    newIMG.src = tab.imagesrc_icon;
-    document.getElementById("tab_li_" + i).appendChild(newIMG);
-    var newA = document.createElement("a");
-    newA.id = "tab_a_" + i;
-    newA.className = "tablinks";
-    newA.href = "#";
-    newA.setAttribute('onclick','openTab(event, ' + "'" + tab.id + "'" + ')')
-    newA.innerHTML = tab.title;
-    document.getElementById("tab_li_" + i).appendChild(newA); //Append header name to tab
-    //Create new Tab content element
-    var newTAB = document.createElement("div");
-    newTAB.id = tab.id;
-    newTAB.dir = tab.direction;
-    newTAB.className = "tabcontent";
-    DIVtabs.appendChild(newTAB); //Append content to tab
+  // Go over all defined objects and create tabs as needed
+  myXMLconfig.objects.forEach(function(object) {
+
+    // Check if tab already exists
+    if (document.getElementById("tab_li_" + object.tab) == null) {
+      // Find the tab index matching the current object.tab
+      var tab_index = myXMLconfig.tabs.findIndex(x => x.id==object.tab);
+      // Create new Tab Element
+      var newLISTitem = document.createElement("li");
+      newLISTitem.id = "tab_li_" + object.tab;
+      document.getElementById("tabs_list").appendChild(newLISTitem); //Append new tab to list
+      //Create new Tab element name - Header Name
+      var newIMG = document.createElement("IMG");
+      newIMG.id = "IMG_tab_icon_" + object.tab;
+      newIMG.src = myXMLconfig.tabs[tab_index].img_icon;
+      document.getElementById("tab_li_" + object.tab).appendChild(newIMG);
+      var newA = document.createElement("a");
+      newA.id = "tab_a_" + object.tab;
+      newA.className = "tablinks";
+      newA.href = "#";
+      newA.setAttribute('onclick','openTab(event, ' + "'" + object.tab + "'" + ')')
+      newA.innerHTML = myXMLconfig.tabs[tab_index].label;
+      document.getElementById("tab_li_" + object.tab).appendChild(newA); //Append header name to tab
+      //Create new Tab content element
+      var newTAB = document.createElement("div");
+      newTAB.id = "tab_div_" + object.tab;
+      newTAB.dir = myXMLconfig.tabs[tab_index].direction;
+      newTAB.className = "tabcontent";
+      DIVtabs.appendChild(newTAB); //Append content to tab
+    }
     
-    switch(tab.id) { // Create elements inside each tab according to the tab type "ID"
-      case "Hardware":
+    // Create object according to obj_type and in the correct tab
+    switch(object.obj_type) {
+      case "Blinds_Slider":
+        // Find the obj_type index matching the current object.obj_type
+        var obj_type_index = myXMLconfig.obj_type.findIndex(x => x.id==object.obj_type);
+        // Create DIV
+        var newDIV = document.createElement("div");
+        newDIV.id = "div_idx_" + object.id;
+        newDIV.className = "Blinds_DIV";
+        document.getElementById("tab_div_" + object.tab).appendChild(newDIV);  // In correct tab
+        // Create P for object name
+        var newP = document.createElement("p");
+        newP.id = "p_idx_" + object.id;
+        newP.innerHTML = object.id + " " + object.label
+        document.getElementById("div_idx_" + object.id).appendChild(newP);
+        // Create IMG for object OPEN function
+        var newIMG = document.createElement("img");
+        newIMG.id = "img_open_idx_" + object.id;
+        newIMG.addEventListener("click", function(){ ChangeBlindState(object.type, object.id, "OPEN", 0); }, false);
+        newIMG.src = myXMLconfig.obj_type[obj_type_index].img_open;
+        document.getElementById("div_idx_" + object.id).appendChild(newIMG);
+        // Create DIV for object slider
+        var newDIV = document.createElement("div");
+        newDIV.id = "div_slider_idx_" + object.id;
+        newDIV.className = "Slider_Container_DIV";
+        document.getElementById("div_idx_" + object.id).appendChild(newDIV);
+        // Create Slider for object
+        var newSlider = document.createElement("input");
+        newSlider.id = "slider_idx_" + object.id;
+        newSlider.setAttribute("type", "range");
+        newSlider.onchange = function(){ ChangeBlindState(object.type, object.id, "LEVEL", newSlider.value); };
+        newSlider.setAttribute("orient", "vertical");
+        document.getElementById("div_slider_idx_" + object.id).appendChild(newSlider);
+        // Create IMG for object CLOSE function
+        var newIMG = document.createElement("img");
+        newIMG.id = "img_close_idx_" + object.id;
+        newIMG.onclick = function(){ ChangeBlindState(object.type, object.id, "CLOSE", 0); };
+        newIMG.src = myXMLconfig.obj_type[obj_type_index].img_close;
+        document.getElementById("div_idx_" + object.id).appendChild(newIMG);
+        // Create P (white space)
+        var newP = document.createElement("p");
+        document.getElementById("div_idx_" + object.id).appendChild(newP);
+        // Create IMG for object STOP function
+        var newIMG = document.createElement("img");
+        newIMG.id = "img_stop_idx_" + object.id;
+        newIMG.onclick = function(){ ChangeBlindState(object.type, object.id, "STOP", 0); };
+        newIMG.src = myXMLconfig.obj_type[obj_type_index].img_stop;
+        document.getElementById("div_idx_" + object.id).appendChild(newIMG);
+        break;
+
+/*     case "Hardware":
         // Create Hardware list element
         var newLIST = document.createElement("ul");
         newLIST.id = "Hardware_List";
@@ -82,83 +135,23 @@ function CreateHTML () {
           }
         });
         break;
-      case "Shades_Lights":
-        myXMLconfig.devices.forEach(function(device) {
-          //console.log(device.tab + " / " + tab.id);
-          if (device.tab == tab.id) {
-            //Create DIV for every device
-            var newDIV = document.createElement("div");
-            newDIV.id = "DIV_IDX_" + device.idx;
-            newDIV.className = "Shades_DIV";
-            document.getElementById(tab.id).appendChild(newDIV);
-            //Create P for every device name
-            var newP = document.createElement("p");
-            newP.id = "P_IDX_" + device.idx;
-            newP.innerHTML = device.idx + " " + device.label
-            document.getElementById("DIV_IDX_" + device.idx).appendChild(newP);
-            //Create IMG for every device OPEN
-            var newIMG = document.createElement("IMG");
-            newIMG.id = "IMG_OPEN_IDX_" + device.idx;
-            newIMG.addEventListener("click", function(){ ChangeBlindState(device.type, device.idx, "OPEN", 0); }, false);
-            newIMG.src = tab.imagesrc_open;
-            document.getElementById("DIV_IDX_" + device.idx).appendChild(newIMG);
-            //Create DIV for every device slider
-            var newDIV = document.createElement("div");
-            newDIV.id = "DIV_SLIDER_IDX_" + device.idx;
-            newDIV.className = "Slider_Container_DIV";
-            document.getElementById("DIV_IDX_" + device.idx).appendChild(newDIV);
-            //Create Slider for every device
-            var newSlider = document.createElement("INPUT");
-            newSlider.id = "SLIDER_IDX_" + device.idx;
-            newSlider.setAttribute("type", "range");
-            newSlider.onchange = function(){ ChangeBlindState(device.type, device.idx, "LEVEL", newSlider.value); };
-            newSlider.setAttribute("orient", "vertical");
-            document.getElementById("DIV_SLIDER_IDX_" + device.idx).appendChild(newSlider);
-            //Create IMG for every device CLOSE
-            var newIMG = document.createElement("IMG");
-            newIMG.id = "IMG_CLOSE_IDX_" + device.idx;
-            newIMG.onclick = function(){ ChangeBlindState(device.type, device.idx, "CLOSE", 0); };
-            newIMG.src = tab.imagesrc_close;
-            document.getElementById("DIV_IDX_" + device.idx).appendChild(newIMG);
-            //Create P for every device (space)
-            var newP = document.createElement("p");
-            document.getElementById("DIV_IDX_" + device.idx).appendChild(newP);
-            //Create IMG for every device STOP
-            var newIMG = document.createElement("IMG");
-            newIMG.id = "IMG_STOP_IDX_" + device.idx;
-            newIMG.onclick = function(){ ChangeBlindState(device.type, device.idx, "STOP", 0); };
-            newIMG.src = tab.imagesrc_stop;
-            document.getElementById("DIV_IDX_" + device.idx).appendChild(newIMG);
-          }
-        });
-        break;
       case "Irrigation":
         myXMLconfig.devices.forEach(function(device) {
           //console.log(device.tab + " / " + tab.id);
           if (device.tab == tab.id) {
             var newDIV = document.createElement("div");
-            newDIV.id = "DIV_IDX" + device.idx;
+            newDIV.id = "DIV_IDX" + device.id;
             newDIV.style.cssFloat = 'right';
             newDIV.style.styleFloat = 'right'; // IE
             document.getElementById(tab.id).appendChild(newDIV);
             var newP = document.createElement("p");
-            newP.id = "IDX_" + device.idx;
-            newP.innerHTML = device.idx + " : " + device.label
-            document.getElementById("DIV_IDX" + device.idx).appendChild(newP);
+            newP.id = "IDX_" + device.id;
+            newP.innerHTML = device.id + " : " + device.label
+            document.getElementById("DIV_IDX" + device.id).appendChild(newP);
           }
         });
         break;
-      default:
-        //console.log(myXMLconfig.devices.device.length);
-        myXMLconfig.devices.forEach(function(device) {
-          //console.log(device.tab + " / " + tab.id);
-          if (device.tab == tab.id) {
-            var newP = document.createElement("p");
-            newP.id = "IDX_" + device.idx;
-            newP.innerHTML = device.idx + " : " + device.label
-            document.getElementById(tab.id).appendChild(newP);
-          }
-        });
+ */      default:
         break;
     }
   });
@@ -166,7 +159,7 @@ function CreateHTML () {
 
 
 function openTab(evt, tabName) {
-  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
+  //console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms] - ' + evt + ' / ' + tabName);
   // Declare all variables
   var i, tabcontent, tablinks;
   // Get all elements with class="tabcontent" and hide them
@@ -180,11 +173,11 @@ function openTab(evt, tabName) {
       tablinks[i].className = tablinks[i].className.replace(" active", "");
   }
   // Show the current tab, and add an "active" class to the link that opened the tab
-  document.getElementById(tabName).style.display = "block";
+  document.getElementById("tab_div_" + tabName).style.display = "block";
   evt.currentTarget.className += " active";
 }
 
-
+/* 
 function UpdateDomoticzLog() {
   console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
   var index;
@@ -267,21 +260,21 @@ function DomoticzDeviceAnalyze(json, i) {
       case "Shades_Lights":
         for (j = 0; j < myXMLconfig.devices.length; j++) {
           if (myXMLconfig.devices[j].tab == myXMLconfig.tabs[k].id) {
-            index = json.result.findIndex(x => x.idx==myXMLconfig.devices[j].idx);
+            index = json.result.findIndex(x => x.id==myXMLconfig.devices[j].id);
             //console.log(index);
             if (index > -1) {
               //console.log(json.result[index].Level);
               if (json.result[index].Level < 50) {
-                //console.log("IMG_OPEN_IDX_" + myXMLconfig.devices[j].idx);
-                document.getElementById("IMG_OPEN_IDX_" + myXMLconfig.devices[j].idx).src = myXMLconfig.tabs[k].imagesrc_open_select;
-                document.getElementById("IMG_CLOSE_IDX_" + myXMLconfig.devices[j].idx).src = myXMLconfig.tabs[k].imagesrc_close;
+                //console.log("IMG_OPEN_IDX_" + myXMLconfig.devices[j].id);
+                document.getElementById("IMG_OPEN_IDX_" + myXMLconfig.devices[j].id).src = myXMLconfig.tabs[k].imagesrc_open_select;
+                document.getElementById("IMG_CLOSE_IDX_" + myXMLconfig.devices[j].id).src = myXMLconfig.tabs[k].imagesrc_close;
               }
               else {
-                //console.log("IMG_CLOSE_IDX_" + myXMLconfig.devices[j].idx);
-                document.getElementById("IMG_OPEN_IDX_" + myXMLconfig.devices[j].idx).src = myXMLconfig.tabs[k].imagesrc_open;
-                document.getElementById("IMG_CLOSE_IDX_" + myXMLconfig.devices[j].idx).src = myXMLconfig.tabs[k].imagesrc_close_select;
+                //console.log("IMG_CLOSE_IDX_" + myXMLconfig.devices[j].id);
+                document.getElementById("IMG_OPEN_IDX_" + myXMLconfig.devices[j].id).src = myXMLconfig.tabs[k].imagesrc_open;
+                document.getElementById("IMG_CLOSE_IDX_" + myXMLconfig.devices[j].id).src = myXMLconfig.tabs[k].imagesrc_close_select;
               }
-              document.getElementById("SLIDER_IDX_" + myXMLconfig.devices[j].idx).value = 100 - json.result[index].Level;
+              document.getElementById("SLIDER_IDX_" + myXMLconfig.devices[j].id).value = 100 - json.result[index].Level;
             }
           }
         }
@@ -412,8 +405,8 @@ function BroadlinkRegisteredDevices(json, i) {
 }
 
 
-function ChangeBlindState(type, idx, command, level) {
-  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms] - ' + idx + "/" + command + "/" + level);
+function ChangeBlindState(type, id, command, level) {
+  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms] - ' + id + "/" + command + "/" + level);
   var jsoncommand = "";
   var i = myXMLconfig.hardware.findIndex(x => x.type==type);
   var component = myXMLconfig.hardware[i];
@@ -421,24 +414,24 @@ function ChangeBlindState(type, idx, command, level) {
   
   switch (command) {
     case "OPEN":
-      jsoncommand = 'http://' + component.ip + ':' + component.port + component.SwitchOffURL.replace("REPLACE_IDX", idx);
+      jsoncommand = 'http://' + component.ip + ':' + component.port + component.SwitchOffURL.replace("REPLACE_IDX", id);
       document.getElementById("commandline").innerHTML = jsoncommand;
       DomoticzSendJSONCommand(jsoncommand, component);
       break;
     case "CLOSE":
-      jsoncommand = 'http://' + component.ip + ':' + component.port + component.SwitchOnURL.replace("REPLACE_IDX", idx);
+      jsoncommand = 'http://' + component.ip + ':' + component.port + component.SwitchOnURL.replace("REPLACE_IDX", id);
       document.getElementById("commandline").innerHTML = jsoncommand;
       DomoticzSendJSONCommand(jsoncommand, component);
       break;
     case "STOP":
-      jsoncommand = 'http://' + component.ip + ':' + component.port + component.SwitchGetURL.replace("REPLACE_IDX", idx);
+      jsoncommand = 'http://' + component.ip + ':' + component.port + component.SwitchGetURL.replace("REPLACE_IDX", id);
       $.ajax({
         url: jsoncommand,
         dataType: "json",
         async: true,
         timeout: ((Object.keys(component.timeout).length === 0 && component.timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : component.timeout),
         success: function(data) {
-                   jsoncommand = component.SwitchSetURL.replace("REPLACE_IDX", idx);
+                   jsoncommand = component.SwitchSetURL.replace("REPLACE_IDX", id);
                    jsoncommand = 'http://' + component.ip + ':' + component.port + jsoncommand.replace("REPLACE_LEVEL", (data.result[0].Level));
                    document.getElementById("commandline").innerHTML = data.status + " " + data.result[0].Level + " " + jsoncommand;
                    DomoticzSendJSONCommand(jsoncommand, component);
@@ -447,7 +440,7 @@ function ChangeBlindState(type, idx, command, level) {
       });
       break;
     case "LEVEL":
-      jsoncommand = component.SwitchSetURL.replace("REPLACE_IDX", idx);
+      jsoncommand = component.SwitchSetURL.replace("REPLACE_IDX", id);
       jsoncommand = 'http://' + component.ip + ':' + component.port + jsoncommand.replace("REPLACE_LEVEL", (100-level));
       document.getElementById("commandline").innerHTML = jsoncommand;
       DomoticzSendJSONCommand(jsoncommand, component);
@@ -476,3 +469,4 @@ function DomoticzSendJSONCommand(jsoncommand, component) {
   });
 }
 
+ */

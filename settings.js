@@ -1,85 +1,83 @@
 ﻿var data = '{ ' +
-             '"js_parameters" : ' +
-                                '{ "CheckHardwareStatusInterval" : 30000, ' +
-                                  '"UpdateDomoticzLogInterval" : 20000, ' +
-                                  '"CheckDeviceStatusInterval" : 3000, ' +
-                                  '"XMLHttpRequestTimeout" : 2000' +
+             ' "js_parameters" : ' +
+                                '{  "CheckHardwareStatusInterval" : 30000 ' +
+                                  ',"UpdateDomoticzLogInterval" : 20000 ' +
+                                  ',"CheckDeviceStatusInterval" : 3000 ' +
+                                  ',"XMLHttpRequestTimeout" : 2000' +
                                 '} ' +
-             ', ' +
-             '"tabs" : ' +
+             ',"tabs" : ' +
                          '[' +
-                           '{ "id" : "Shades_Lights", "title" : "תריסים ותאורה",  "direction" : "rtl", "imagesrc_icon" : "images/blinds.png", "imagesrc_open" : "images/blindsopen48.png", "imagesrc_close" : "images/blinds48.png", "imagesrc_open_select" : "images/blindsopen48sel.png", "imagesrc_close_select" : "images/blinds48sel.png", "imagesrc_stop" : "images/blindsstop.png" },' +
-                           '{ "id" : "Irrigation",    "title" : "השקייה",         "direction" : "rtl", "imagesrc_icon" : "",                  "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" },' +
-                           '{ "id" : "HVAC",          "title" : "מיזוג",          "direction" : "rtl", "imagesrc_icon" : "",                  "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" },' +
-                           '{ "id" : "Boiler",        "title" : "דוד חשמל",       "direction" : "rtl", "imagesrc_icon" : "",                  "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" },' +
-                           '{ "id" : "Sensors",       "title" : "חיישנים",        "direction" : "rtl", "imagesrc_icon" : "",                  "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" },' +
-                           '{ "id" : "Cameras",       "title" : "מצלמות",         "direction" : "rtl", "imagesrc_icon" : "",                  "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" },' +
-                           '{ "id" : "Multimedia",    "title" : "מולטימדיה",      "direction" : "rtl", "imagesrc_icon" : "",                  "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" },' +
-                           '{ "id" : "Hardware",      "title" : "חומרה",          "direction" : "ltr", "imagesrc_icon" : "",                  "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" },' +
-                           '{ "id" : "Log",           "title" : "לוג",            "direction" : "ltr", "imagesrc_icon" : "images/log.png",    "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" }' +
+                           ' { "id" : "Shades_Lights", "label" : "תריסים ותאורה",  "direction" : "rtl", "img_icon" : "images/blinds.png" }' +
+                           ',{ "id" : "Irrigation",    "label" : "השקייה",         "direction" : "rtl", "img_icon" : ""                  }' +
+                           ',{ "id" : "HVAC",          "label" : "מיזוג",          "direction" : "rtl", "img_icon" : ""                  }' +
+                           ',{ "id" : "Boiler",        "label" : "דוד חשמל",       "direction" : "rtl", "img_icon" : ""                  }' +
+                           ',{ "id" : "Sensors",       "label" : "חיישנים",        "direction" : "rtl", "img_icon" : ""                  }' +
+                           ',{ "id" : "Cameras",       "label" : "מצלמות",         "direction" : "rtl", "img_icon" : ""                  }' +
+                           ',{ "id" : "Multimedia",    "label" : "מולטימדיה",      "direction" : "rtl", "img_icon" : ""                  }' +
+                           ',{ "id" : "Hardware",      "label" : "חומרה",          "direction" : "ltr", "img_icon" : ""                  }' +
+                           ',{ "id" : "Log",           "label" : "לוג",            "direction" : "ltr", "img_icon" : "images/log.png"    }' +
                          ']' +
-             ', ' +
-             '"devices" : ' +
-                          '[' +
-                            '{ "idx" : "1",  "type" : "Domoticz Server", "tab" : "Shades_Lights", "label" : "ויטרינה" },' +
-                            '{ "idx" : "35", "type" : "Domoticz Server", "tab" : "Shades_Lights", "label" : "סלון" },' +
-                            '{ "idx" : "30", "type" : "Domoticz Server", "tab" : "Shades_Lights", "label" : "חדר אוכל" },' +
-                            '{ "idx" : "63", "type" : "Domoticz Server", "tab" : "Shades_Lights", "label" : "חדר שישי" },' +
-                            '{ "idx" : "50", "type" : "Domoticz Server", "tab" : "Shades_Lights", "label" : "אלה" },' +
-                            '{ "idx" : "56", "type" : "Domoticz Server", "tab" : "Shades_Lights", "label" : "נגה צפוני" },' +
-                            '{ "idx" : "69", "type" : "Domoticz Server", "tab" : "Shades_Lights", "label" : "נגה מערבי" },' +
-                            '{ "idx" : "21", "type" : "Domoticz Server", "tab" : "Irrigation",    "label" : "ממטרות מערב" },' +
-                            '{ "idx" : "22", "type" : "Domoticz Server", "tab" : "Irrigation",    "label" : "ממטרות צפון" },' +
-                            '{ "idx" : "23", "type" : "Domoticz Server", "tab" : "Irrigation",    "label" : "טפטפות" }' +
-                          ']' +
-             ', ' +
-             '"hardware" : ' +
+             ',"obj_type" : ' +
                            '[' +
-                             '{ "name" : "Domoticz Server", ' +
-                               '"type" : "Domoticz Server", ' +
-                               '"ip" : "192.168.2.19", ' + 
-                               '"port" : "8080", ' +
-                               '"user" : "", ' +
-                               '"password" : "", ' +
-                               '"timeout" : 3000, ' +
-                               '"logURL" : "/json.htm?type=command&param=getlog&jsoncallback=?", ' +
-                               '"dataURL" : "/json.htm?type=devices&filter=all&used=true&order=Name&jsoncallback=?", ' +
-                               '"SwitchOnURL" : "/json.htm?type=command&param=switchlight&idx=REPLACE_IDX&switchcmd=On", ' +
-                               '"SwitchOffURL" : "/json.htm?type=command&param=switchlight&idx=REPLACE_IDX&switchcmd=Off", ' +
-                               '"SwitchSetURL" : "/json.htm?type=command&param=switchlight&idx=REPLACE_IDX&switchcmd=Set%20Level&level=REPLACE_LEVEL", ' +
-                               '"SwitchGetURL" : "/json.htm?type=devices&rid=REPLACE_IDX" ' +
-                             '}, ' +
-                             '{ "name" : "LMS", ' +
-                               '"type" : "Logitech Media Server", ' +
-                               '"ip" : "192.168.2.117", ' + 
-                               '"port" : "9000", ' +
-                               '"user" : "", ' +
-                               '"password" : "", ' +
-                               '"timeout" : 3000 ' +
-                             '}, ' +
-                             '{ "name" : "ESP Cloud Witty #3", ' +
-                               '"type" : "ESP Easy", ' +
-                               '"ip" : "192.168.2.23", ' + 
-                               '"port" : "80", ' +
-                               '"user" : "", ' +
-                               '"password" : "", ' +
-                               '"timeout" : 3000 ' +
-                             '}, ' +
-                             '{ "name" : "Broadlink RM Bridge", ' +
-                               '"type" : "Broadlink RM Bridge", ' +
-                               '"ip" : "192.168.2.60", ' + 
-                               '"port" : "7474", ' +
-                               '"user" : "", ' +
-                               '"password" : "", ' +
-                               '"timeout" : 3000 ' +
-                             '}, ' +
-                             '{ "name" : "MKTronic LAN Ethernet IP 8 Channels WEB Relay Board", ' +
-                               '"type" : "MKTronic LAN Relay Board", ' +
-                               '"ip" : "192.168.2.20", ' + 
-                               '"port" : "80", ' +
-                               '"user" : "", ' +
-                               '"password" : "", ' +
-                               '"timeout" : 3000 ' +
-                             '} ' +
+                             ' {  "id" : "Blinds_Slider" ' +
+                                ',"img_open" : "images/blindsopen48.png" ' + 
+                                ',"img_close" : "images/blinds48.png" ' +
+                                ',"img_open_select" : "images/blindsopen48sel.png" ' +
+                                ',"img_close_select" : "images/blinds48sel.png" ' +
+                                ',"img_stop" : "images/blindsstop.png" ' +
+                             ' } ' +
+                             ',{ "id" : "Domoticz" ' +
+                             ' } ' +
+                             ',{ "id" : "LMS" ' +
+                             ' } ' +
+                             ',{ "id" : "ESP_EASY" ' +
+                             ' } ' +
+                             ',{ "id" : "Broadlink" ' +
+                             ' } ' +
+                             ',{ "id" : "MKTronic" ' +
+                             ' } ' +
                            ']' +
+             ',"ctrl_type" : ' +
+                           '[' +
+                             '{  "id" : "Domoticz" ' +
+                               ',"timeout" : 3000 ' +
+                               ',"logURL" : "/json.htm?type=command&param=getlog&jsoncallback=?" ' +
+                               ',"dataURL" : "/json.htm?type=devices&filter=all&used=true&order=Name&jsoncallback=?" ' +
+                               ',"SwitchOnURL" : "/json.htm?type=command&param=switchlight&idx=REPLACE_IDX&switchcmd=On" ' +
+                               ',"SwitchOffURL" : "/json.htm?type=command&param=switchlight&idx=REPLACE_IDX&switchcmd=Off" ' +
+                               ',"SwitchSetURL" : "/json.htm?type=command&param=switchlight&idx=REPLACE_IDX&switchcmd=Set%20Level&level=REPLACE_LEVEL" ' +
+                               ',"SwitchGetURL" : "/json.htm?type=devices&rid=REPLACE_IDX" ' +
+                             ' } ' +
+                             ',{ "id" : "LMS" ' +
+                               ',"timeout" : 3000 ' +
+                             ' } ' +
+                             ',{ "id" : "ESP_EASY" ' +
+                               ',"timeout" : 3000 ' +
+                             ' } ' +
+                             ',{ "id" : "Broadlink" ' +
+                               ',"timeout" : 3000 ' +
+                             ' } ' +
+                             ',{ "id" : "MKTronic" ' +
+                               ',"timeout" : 3000 ' +
+                             ' } ' +
+                           ']' +
+             ',"objects" : ' +
+                          '[' +
+                            ' { "id" : "1",  "obj_type" : "Blinds_Slider", "ctrl_type" : "Domoticz", "tab" : "Shades_Lights", "label" : "ויטרינה" }' +
+                            ',{ "id" : "35", "obj_type" : "Blinds_Slider", "ctrl_type" : "Domoticz", "tab" : "Shades_Lights", "label" : "סלון" }' +
+                            ',{ "id" : "30", "obj_type" : "Blinds_Slider", "ctrl_type" : "Domoticz", "tab" : "Shades_Lights", "label" : "חדר אוכל" }' +
+                            ',{ "id" : "63", "obj_type" : "Blinds_Slider", "ctrl_type" : "Domoticz", "tab" : "Shades_Lights", "label" : "חדר שישי" }' +
+                            ',{ "id" : "50", "obj_type" : "Blinds_Slider", "ctrl_type" : "Domoticz", "tab" : "Shades_Lights", "label" : "אלה" }' +
+                            ',{ "id" : "56", "obj_type" : "Blinds_Slider", "ctrl_type" : "Domoticz", "tab" : "Shades_Lights", "label" : "נגה צפוני" }' +
+                            ',{ "id" : "69", "obj_type" : "Blinds_Slider", "ctrl_type" : "Domoticz", "tab" : "Shades_Lights", "label" : "נגה מערבי" }' +
+                            ',{ "id" : "21", "obj_type" : "Water",         "ctrl_type" : "Domoticz", "tab" : "Irrigation",    "label" : "ממטרות מערב" }' +
+                            ',{ "id" : "22", "obj_type" : "Water",         "ctrl_type" : "Domoticz", "tab" : "Irrigation",    "label" : "ממטרות צפון" }' +
+                            ',{ "id" : "23", "obj_type" : "Water",         "ctrl_type" : "Domoticz", "tab" : "Irrigation",    "label" : "טפטפות" }' +
+
+                            ',{ "id" : "", "obj_type" : "Domoticz",  "ctrl_type" : "Domoticz",  "tab" : "Hardware",   "label" : "Domoticz Server",       "ip" : "192.168.2.19",  "port" : "8080", "user" : "", "password" : ""}' +
+                            ',{ "id" : "", "obj_type" : "LMS",       "ctrl_type" : "LMS",       "tab" : "Multimedia", "label" : "Logitech Media Server", "ip" : "192.168.2.117", "port" : "9000", "user" : "", "password" : ""}' +
+                            ',{ "id" : "", "obj_type" : "ESP_Easy",  "ctrl_type" : "ESP_Easy",  "tab" : "Multimedia", "label" : "ESP Cloud Witty #3",    "ip" : "192.168.2.23",  "port" : "80",   "user" : "", "password" : ""}' +
+                            ',{ "id" : "", "obj_type" : "Broadlink", "ctrl_type" : "Broadlink", "tab" : "Hardware",   "label" : "Broadlink RM Bridge",   "ip" : "192.168.2.60",  "port" : "7474", "user" : "", "password" : ""}' +
+                            ',{ "id" : "", "obj_type" : "MKTronic",  "ctrl_type" : "MKTronic",  "tab" : "Multimedia", "label" : "MKTronic LAN Ethernet IP 8 Channels WEB Relay Board",    "ip" : "192.168.2.20",  "port" : "80",   "user" : "", "password" : ""}' +
+                          ']' +
            '}';
