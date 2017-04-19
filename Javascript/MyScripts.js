@@ -27,7 +27,7 @@ function CreateHTML () {
   DIVtabs.appendChild(newLIST);
 
   // Create tabs according to settings.xml
-  myXMLconfig.layout.tabs.tab.forEach(function(tab, i) {
+  myXMLconfig.tabs.forEach(function(tab, i) {
     // Create new Tab Element
     var newLISTitem = document.createElement("li");
     newLISTitem.id = "tab_li_" + i;
@@ -59,7 +59,7 @@ function CreateHTML () {
         newLIST.dir = "ltr";
         document.getElementById(tab.id).appendChild(newLIST); //Append Hardware List to tab content (div)
         //console.log(myXMLconfig.hardware.component.length);
-        myXMLconfig.hardware.component.forEach(function(component) {
+        myXMLconfig.hardware.forEach(function(component) {
           // Create new Hardware Element
           var newLISTitem = document.createElement("li");
           newLISTitem.id = component.name + "_Status";
@@ -70,7 +70,7 @@ function CreateHTML () {
       case "Log":
         break;
       case "Multimedia":
-        myXMLconfig.hardware.component.forEach(function(component) {
+        myXMLconfig.hardware.forEach(function(component) {
           if (component.type == "Logitech Media Server") {
             var newIFRAME = document.createElement("iframe");
             newIFRAME.id = "Logitech Media Server";
@@ -83,7 +83,7 @@ function CreateHTML () {
         });
         break;
       case "Shades_Lights":
-        myXMLconfig.devices.device.forEach(function(device) {
+        myXMLconfig.devices.forEach(function(device) {
           //console.log(device.tab + " / " + tab.id);
           if (device.tab == tab.id) {
             //Create DIV for every device
@@ -133,7 +133,7 @@ function CreateHTML () {
         });
         break;
       case "Irrigation":
-        myXMLconfig.devices.device.forEach(function(device) {
+        myXMLconfig.devices.forEach(function(device) {
           //console.log(device.tab + " / " + tab.id);
           if (device.tab == tab.id) {
             var newDIV = document.createElement("div");
@@ -150,7 +150,7 @@ function CreateHTML () {
         break;
       default:
         //console.log(myXMLconfig.devices.device.length);
-        myXMLconfig.devices.device.forEach(function(device) {
+        myXMLconfig.devices.forEach(function(device) {
           //console.log(device.tab + " / " + tab.id);
           if (device.tab == tab.id) {
             var newP = document.createElement("p");
@@ -189,9 +189,9 @@ function UpdateDomoticzLog() {
   console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
   var index;
   var DomoticzLogURL = "";
-  for (i = 0; i < myXMLconfig.hardware.component.length; i++) {
-    if (myXMLconfig.hardware.component[i].type == "Domoticz Server") {
-      DomoticzLogURL = 'http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + myXMLconfig.hardware.component[i].logURL;
+  for (i = 0; i < myXMLconfig.hardware.length; i++) {
+    if (myXMLconfig.hardware[i].type == "Domoticz Server") {
+      DomoticzLogURL = 'http://' + myXMLconfig.hardware[i].ip + ':' + myXMLconfig.hardware[i].port + myXMLconfig.hardware[i].logURL;
       //console.log(DomoticzLogURL);
       index = i;
       break;
@@ -203,11 +203,11 @@ function UpdateDomoticzLog() {
           url: DomoticzLogURL,
           dataType: "json",
           async: true,
-          timeout: ((Object.keys(myXMLconfig.hardware.component[i].timeout).length === 0 && myXMLconfig.hardware.component[i].timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : myXMLconfig.hardware.component[i].timeout),
+          timeout: ((Object.keys(myXMLconfig.hardware[i].timeout).length === 0 && myXMLconfig.hardware[i].timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : myXMLconfig.hardware[i].timeout),
           indexValue: index,
           success: function(data) {DomoticzLogAnalyze(data, this.indexValue);},
           error: function () {
-                   document.getElementById(myXMLconfig.hardware.component[this.indexValue].type + "_Status").style.color = "red";
+                   document.getElementById(myXMLconfig.hardware[this.indexValue].type + "_Status").style.color = "red";
                    document.getElementById("Log Content").innerHTML = "Server could not be reached";
                  }
         });
@@ -216,14 +216,14 @@ function UpdateDomoticzLog() {
     //console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
     //console.log(json);
     if (json.status == "OK") {
-      document.getElementById(myXMLconfig.hardware.component[index].type + "_Status").style.color = "lightgreen";
+      document.getElementById(myXMLconfig.hardware[index].type + "_Status").style.color = "lightgreen";
       var logtext = "";
       for (i = (json.result.length - 1); i >= 0; i--) {
         logtext += json.result[i].message + "<br>";
       }
       document.getElementById("Log").innerHTML = logtext;
     } else {
-      document.getElementById(myXMLconfig.hardware.component[index].type + "_Status").style.color = "red";
+      document.getElementById(myXMLconfig.hardware[index].type + "_Status").style.color = "red";
       document.getElementById("Log").innerHTML = "Server returned Status = " + json.status;
     }
     console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
@@ -233,20 +233,20 @@ function UpdateDomoticzLog() {
 
 function CheckDeviceStatus() {
   console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
-  for (var i = 0; i < myXMLconfig.hardware.component.length; i++) {
-    //console.log(myXMLconfig.hardware.component[i].type);
-    switch (myXMLconfig.hardware.component[i].type) {
+  for (var i = 0; i < myXMLconfig.hardware.length; i++) {
+    //console.log(myXMLconfig.hardware[i].type);
+    switch (myXMLconfig.hardware[i].type) {
       case "Domoticz Server" :
-        //console.log('http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + myXMLconfig.hardware.component[i].dataURL);
+        //console.log('http://' + myXMLconfig.hardware[i].ip + ':' + myXMLconfig.hardware[i].port + myXMLconfig.hardware[i].dataURL);
         //$.getJSON(DomoticzDataURL, {format: "json"}, function(data) {DomoticzDataAnalyze(data);});
         $.ajax({
-          url: 'http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + myXMLconfig.hardware.component[i].dataURL,
+          url: 'http://' + myXMLconfig.hardware[i].ip + ':' + myXMLconfig.hardware[i].port + myXMLconfig.hardware[i].dataURL,
           dataType: "json",
           async: true,
-          timeout: ((Object.keys(myXMLconfig.hardware.component[i].timeout).length === 0 && myXMLconfig.hardware.component[i].timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : myXMLconfig.hardware.component[i].timeout),
+          timeout: ((Object.keys(myXMLconfig.hardware[i].timeout).length === 0 && myXMLconfig.hardware[i].timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : myXMLconfig.hardware[i].timeout),
           indexValue: i,
           success: function(data) {DomoticzDeviceAnalyze(data, this.indexValue);},
-          error: function () { document.getElementById(myXMLconfig.hardware.component[this.indexValue].type + "_Status").style.color = "red";  }
+          error: function () { document.getElementById(myXMLconfig.hardware[this.indexValue].type + "_Status").style.color = "red";  }
         });
       case "MKTronic LAN Relay Board" :
         break;
@@ -262,26 +262,26 @@ function CheckDeviceStatus() {
 function DomoticzDeviceAnalyze(json, i) {
   console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
   //console.log(json);
-  for (k = 0; k < myXMLconfig.layout.tabs.tab.length; k++) {
-    switch(myXMLconfig.layout.tabs.tab[k].id) { // Create elements inside each tab according to the tab type "ID"
+  for (k = 0; k < myXMLconfig.tabs.length; k++) {
+    switch(myXMLconfig.tabs[k].id) { // Create elements inside each tab according to the tab type "ID"
       case "Shades_Lights":
-        for (j = 0; j < myXMLconfig.devices.device.length; j++) {
-          if (myXMLconfig.devices.device[j].tab == myXMLconfig.layout.tabs.tab[k].id) {
-            index = json.result.findIndex(x => x.idx==myXMLconfig.devices.device[j].idx);
+        for (j = 0; j < myXMLconfig.devices.length; j++) {
+          if (myXMLconfig.devices[j].tab == myXMLconfig.tabs[k].id) {
+            index = json.result.findIndex(x => x.idx==myXMLconfig.devices[j].idx);
             //console.log(index);
             if (index > -1) {
               //console.log(json.result[index].Level);
               if (json.result[index].Level < 50) {
-                //console.log("IMG_OPEN_IDX_" + myXMLconfig.devices.device[j].idx);
-                document.getElementById("IMG_OPEN_IDX_" + myXMLconfig.devices.device[j].idx).src = myXMLconfig.layout.tabs.tab[k].imagesrc_open_select;
-                document.getElementById("IMG_CLOSE_IDX_" + myXMLconfig.devices.device[j].idx).src = myXMLconfig.layout.tabs.tab[k].imagesrc_close;
+                //console.log("IMG_OPEN_IDX_" + myXMLconfig.devices[j].idx);
+                document.getElementById("IMG_OPEN_IDX_" + myXMLconfig.devices[j].idx).src = myXMLconfig.tabs[k].imagesrc_open_select;
+                document.getElementById("IMG_CLOSE_IDX_" + myXMLconfig.devices[j].idx).src = myXMLconfig.tabs[k].imagesrc_close;
               }
               else {
-                //console.log("IMG_CLOSE_IDX_" + myXMLconfig.devices.device[j].idx);
-                document.getElementById("IMG_OPEN_IDX_" + myXMLconfig.devices.device[j].idx).src = myXMLconfig.layout.tabs.tab[k].imagesrc_open;
-                document.getElementById("IMG_CLOSE_IDX_" + myXMLconfig.devices.device[j].idx).src = myXMLconfig.layout.tabs.tab[k].imagesrc_close_select;
+                //console.log("IMG_CLOSE_IDX_" + myXMLconfig.devices[j].idx);
+                document.getElementById("IMG_OPEN_IDX_" + myXMLconfig.devices[j].idx).src = myXMLconfig.tabs[k].imagesrc_open;
+                document.getElementById("IMG_CLOSE_IDX_" + myXMLconfig.devices[j].idx).src = myXMLconfig.tabs[k].imagesrc_close_select;
               }
-              document.getElementById("SLIDER_IDX_" + myXMLconfig.devices.device[j].idx).value = 100 - json.result[index].Level;
+              document.getElementById("SLIDER_IDX_" + myXMLconfig.devices[j].idx).value = 100 - json.result[index].Level;
             }
           }
         }
@@ -297,54 +297,54 @@ function DomoticzDeviceAnalyze(json, i) {
 
 function CheckHardwareStatus() {
   console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
-  for (var i = 0; i < myXMLconfig.hardware.component.length; i++) {
-    //console.log(myXMLconfig.hardware.component[i].type);
-    switch (myXMLconfig.hardware.component[i].type) {
+  for (var i = 0; i < myXMLconfig.hardware.length; i++) {
+    //console.log(myXMLconfig.hardware[i].type);
+    switch (myXMLconfig.hardware[i].type) {
       case "Domoticz Server" :
-        //console.log('http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + myXMLconfig.hardware.component[i].dataURL);
+        //console.log('http://' + myXMLconfig.hardware[i].ip + ':' + myXMLconfig.hardware[i].port + myXMLconfig.hardware[i].dataURL);
         //$.getJSON(DomoticzDataURL, {format: "json"}, function(data) {DomoticzDataAnalyze(data);});
         $.ajax({
-          url: 'http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + myXMLconfig.hardware.component[i].dataURL,
+          url: 'http://' + myXMLconfig.hardware[i].ip + ':' + myXMLconfig.hardware[i].port + myXMLconfig.hardware[i].dataURL,
           dataType: "json",
           async: true,
-          timeout: ((Object.keys(myXMLconfig.hardware.component[i].timeout).length === 0 && myXMLconfig.hardware.component[i].timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : myXMLconfig.hardware.component[i].timeout),
+          timeout: ((Object.keys(myXMLconfig.hardware[i].timeout).length === 0 && myXMLconfig.hardware[i].timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : myXMLconfig.hardware[i].timeout),
           indexValue: i,
           success: function(data) {DomoticzDataAnalyze(data, this.indexValue);},
-          error: function () { document.getElementById(myXMLconfig.hardware.component[this.indexValue].type + "_Status").style.color = "red";  }
+          error: function () { document.getElementById(myXMLconfig.hardware[this.indexValue].type + "_Status").style.color = "red";  }
         });
       case "MKTronic LAN Relay Board" :
-        //console.log('http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + ' ' + Math.round(new Date().getTime()) + ' [ms]');
+        //console.log('http://' + myXMLconfig.hardware[i].ip + ':' + myXMLconfig.hardware[i].port + ' ' + Math.round(new Date().getTime()) + ' [ms]');
         break;
       case "Broadlink RM Bridge" :
-        //console.log('http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + '/?cmd=' + encodeURI(JSON.stringify({api_id:1000, command:'registered_devices'})) + '&callback=BroadlinkDataAnalyze' + ' ' + Math.round(new Date().getTime()) + ' [ms]');
+        //console.log('http://' + myXMLconfig.hardware[i].ip + ':' + myXMLconfig.hardware[i].port + '/?cmd=' + encodeURI(JSON.stringify({api_id:1000, command:'registered_devices'})) + '&callback=BroadlinkDataAnalyze' + ' ' + Math.round(new Date().getTime()) + ' [ms]');
         $.ajax({
-          url: 'http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + '/?cmd=' + encodeURI(JSON.stringify({api_id:1001, command:'probe_devices'})),
+          url: 'http://' + myXMLconfig.hardware[i].ip + ':' + myXMLconfig.hardware[i].port + '/?cmd=' + encodeURI(JSON.stringify({api_id:1001, command:'probe_devices'})),
           dataType: "jsonp",
           async: true,
-          timeout: ((Object.keys(myXMLconfig.hardware.component[i].timeout).length === 0 && myXMLconfig.hardware.component[i].timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : myXMLconfig.hardware.component[i].timeout),
+          timeout: ((Object.keys(myXMLconfig.hardware[i].timeout).length === 0 && myXMLconfig.hardware[i].timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : myXMLconfig.hardware[i].timeout),
           indexValue: i,
           success: function(data) {BroadlinkProbeDevices(data, this.indexValue);},
           error: function () {
-              document.getElementById(myXMLconfig.hardware.component[this.indexValue].type + "_Status").style.color = "red"; 
-              document.getElementById(myXMLconfig.hardware.component[this.indexValue].type + "_Status").removeChild(document.getElementById(myXMLconfig.hardware.component[this.indexValue].type + "_Nodes"));
+              document.getElementById(myXMLconfig.hardware[this.indexValue].type + "_Status").style.color = "red"; 
+              document.getElementById(myXMLconfig.hardware[this.indexValue].type + "_Status").removeChild(document.getElementById(myXMLconfig.hardware[this.indexValue].type + "_Nodes"));
             }
         });
         break;
       default :
         (function(i) {
           var xhr = new XMLHttpRequest();
-            //console.log('http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + ' ' + Math.round(new Date().getTime()) + ' [ms]');
-            xhr.open("GET", 'http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port, true);
+            //console.log('http://' + myXMLconfig.hardware[i].ip + ':' + myXMLconfig.hardware[i].port + ' ' + Math.round(new Date().getTime()) + ' [ms]');
+            xhr.open("GET", 'http://' + myXMLconfig.hardware[i].ip + ':' + myXMLconfig.hardware[i].port, true);
             xhr.onreadystatechange = function () {
             if ((xhr.readyState == 4) && (xhr.status == 200)) {
-              //console.log(myXMLconfig.hardware.component[i].name + "_Status");
-              document.getElementById(myXMLconfig.hardware.component[i].name + "_Status").style.color = "lightgreen";
+              //console.log(myXMLconfig.hardware[i].name + "_Status");
+              document.getElementById(myXMLconfig.hardware[i].name + "_Status").style.color = "lightgreen";
             } else {
-              //console.log(myXMLconfig.hardware.component[i].name + "_Status (else)");
-              document.getElementById(myXMLconfig.hardware.component[i].name + "_Status").style.color = "red";
+              //console.log(myXMLconfig.hardware[i].name + "_Status (else)");
+              document.getElementById(myXMLconfig.hardware[i].name + "_Status").style.color = "red";
             }
           };
-          xhr.timeout = ((Object.keys(myXMLconfig.hardware.component[i].timeout).length === 0 && myXMLconfig.hardware.component[i].timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : myXMLconfig.hardware.component[i].timeout);
+          xhr.timeout = ((Object.keys(myXMLconfig.hardware[i].timeout).length === 0 && myXMLconfig.hardware[i].timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : myXMLconfig.hardware[i].timeout);
           xhr.send();
         })(i);
     }
@@ -370,20 +370,20 @@ function BroadlinkProbeDevices(json, i) {
   //console.log(json);
   if (json.code == 0) {
     $.ajax({
-      url: 'http://' + myXMLconfig.hardware.component[i].ip + ':' + myXMLconfig.hardware.component[i].port + '/?cmd=' + encodeURI(JSON.stringify({api_id:1000, command:'registered_devices'})),
+      url: 'http://' + myXMLconfig.hardware[i].ip + ':' + myXMLconfig.hardware[i].port + '/?cmd=' + encodeURI(JSON.stringify({api_id:1000, command:'registered_devices'})),
       dataType: "jsonp",
       async: true,
-      timeout: ((Object.keys(myXMLconfig.hardware.component[i].timeout).length === 0 && myXMLconfig.hardware.component[i].timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : myXMLconfig.hardware.component[i].timeout),
+      timeout: ((Object.keys(myXMLconfig.hardware[i].timeout).length === 0 && myXMLconfig.hardware[i].timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : myXMLconfig.hardware[i].timeout),
       indexValue: i,
       success: function(data) {BroadlinkRegisteredDevices(data, this.indexValue);},
       error: function () {
-          document.getElementById(myXMLconfig.hardware.component[this.indexValue].type + "_Status").style.color = "red";
-          document.getElementById(myXMLconfig.hardware.component[this.indexValue].type + "_Status").removeChild(document.getElementById(myXMLconfig.hardware.component[this.indexValue].type + "_Nodes"));
+          document.getElementById(myXMLconfig.hardware[this.indexValue].type + "_Status").style.color = "red";
+          document.getElementById(myXMLconfig.hardware[this.indexValue].type + "_Status").removeChild(document.getElementById(myXMLconfig.hardware[this.indexValue].type + "_Nodes"));
         }
     });
   } else {
-    document.getElementById(myXMLconfig.hardware.component[i].type + "_Status").style.color = "red";
-    document.getElementById(myXMLconfig.hardware.component[i].type + "_Status").removeChild(document.getElementById(myXMLconfig.hardware.component[i].type + "_Nodes"));
+    document.getElementById(myXMLconfig.hardware[i].type + "_Status").style.color = "red";
+    document.getElementById(myXMLconfig.hardware[i].type + "_Status").removeChild(document.getElementById(myXMLconfig.hardware[i].type + "_Nodes"));
   }
 }
 
@@ -392,22 +392,22 @@ function BroadlinkRegisteredDevices(json, i) {
   //console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
   //console.log(json);
   if (json.code == 0) {
-    document.getElementById(myXMLconfig.hardware.component[i].type + "_Status").style.color = "lightgreen";
-    if (document.getElementById(myXMLconfig.hardware.component[i].type + "_Nodes") != null) {
-      document.getElementById(myXMLconfig.hardware.component[i].type + "_Status").removeChild(document.getElementById(myXMLconfig.hardware.component[i].type + "_Nodes"));
+    document.getElementById(myXMLconfig.hardware[i].type + "_Status").style.color = "lightgreen";
+    if (document.getElementById(myXMLconfig.hardware[i].type + "_Nodes") != null) {
+      document.getElementById(myXMLconfig.hardware[i].type + "_Status").removeChild(document.getElementById(myXMLconfig.hardware[i].type + "_Nodes"));
     }
     var newNode = document.createElement("ul");
-    newNode.id = myXMLconfig.hardware.component[i].type + "_Nodes"
-    document.getElementById(myXMLconfig.hardware.component[i].type + "_Status").appendChild(newNode);
+    newNode.id = myXMLconfig.hardware[i].type + "_Nodes"
+    document.getElementById(myXMLconfig.hardware[i].type + "_Status").appendChild(newNode);
     for (var j = 0; j < json.list.length; j++) {
       var newNode = document.createElement("li");
-      newNode.id = myXMLconfig.hardware.component[i].type + " " + j;
-      document.getElementById(myXMLconfig.hardware.component[i].type + "_Nodes").appendChild(newNode);
-      document.getElementById(myXMLconfig.hardware.component[i].type + " " + j).innerHTML = "Name: " + json.list[j].name + " MAC: " + json.list[j].mac;
+      newNode.id = myXMLconfig.hardware[i].type + " " + j;
+      document.getElementById(myXMLconfig.hardware[i].type + "_Nodes").appendChild(newNode);
+      document.getElementById(myXMLconfig.hardware[i].type + " " + j).innerHTML = "Name: " + json.list[j].name + " MAC: " + json.list[j].mac;
     }
   } else {
-    document.getElementById(myXMLconfig.hardware.component[i].type + "_Status").style.color = "red";
-    document.getElementById(myXMLconfig.hardware.component[i].type + "_Status").removeChild(document.getElementById(myXMLconfig.hardware.component[i].type + "_Nodes"));
+    document.getElementById(myXMLconfig.hardware[i].type + "_Status").style.color = "red";
+    document.getElementById(myXMLconfig.hardware[i].type + "_Status").removeChild(document.getElementById(myXMLconfig.hardware[i].type + "_Nodes"));
   }
 }
 
@@ -415,8 +415,8 @@ function BroadlinkRegisteredDevices(json, i) {
 function ChangeBlindState(type, idx, command, level) {
   console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms] - ' + idx + "/" + command + "/" + level);
   var jsoncommand = "";
-  var i = myXMLconfig.hardware.component.findIndex(x => x.type==type);
-  var component = myXMLconfig.hardware.component[i];
+  var i = myXMLconfig.hardware.findIndex(x => x.type==type);
+  var component = myXMLconfig.hardware[i];
   console.log(component);
   
   switch (command) {

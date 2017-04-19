@@ -6,25 +6,20 @@
                                   '"XMLHttpRequestTimeout" : 2000' +
                                 '} ' +
              ', ' +
-             '"layout" : ' +
-                         '{ "tabs" : ' +
-                         '{ "tab" : ' +
-                                     '[' +
-                                       '{ "id" : "Shades_Lights", "title" : "תריסים ותאורה",  "direction" : "rtl", "imagesrc_icon" : "images/blinds.png", "imagesrc_open" : "images/blindsopen48.png", "imagesrc_close" : "images/blinds48.png", "imagesrc_open_select" : "images/blindsopen48sel.png", "imagesrc_close_select" : "images/blinds48sel.png", "imagesrc_stop" : "images/blindsstop.png" },' +
-                                       '{ "id" : "Irrigation",    "title" : "השקייה",         "direction" : "rtl", "imagesrc_icon" : "",                  "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" },' +
-                                       '{ "id" : "HVAC",          "title" : "מיזוג",          "direction" : "rtl", "imagesrc_icon" : "",                  "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" },' +
-                                       '{ "id" : "Boiler",        "title" : "דוד חשמל",       "direction" : "rtl", "imagesrc_icon" : "",                  "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" },' +
-                                       '{ "id" : "Sensors",       "title" : "חיישנים",        "direction" : "rtl", "imagesrc_icon" : "",                  "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" },' +
-                                       '{ "id" : "Cameras",       "title" : "מצלמות",         "direction" : "rtl", "imagesrc_icon" : "",                  "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" },' +
-                                       '{ "id" : "Multimedia",    "title" : "מולטימדיה",      "direction" : "rtl", "imagesrc_icon" : "",                  "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" },' +
-                                       '{ "id" : "Hardware",      "title" : "חומרה",            "direction" : "ltr", "imagesrc_icon" : "",                  "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" },' +
-                                       '{ "id" : "Log",           "title" : "לוג",          "direction" : "ltr", "imagesrc_icon" : "images/log.png",    "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" }' +
-                                     ']' +
-                         '}' +
-                         '}' +
+             '"tabs" : ' +
+                         '[' +
+                           '{ "id" : "Shades_Lights", "title" : "תריסים ותאורה",  "direction" : "rtl", "imagesrc_icon" : "images/blinds.png", "imagesrc_open" : "images/blindsopen48.png", "imagesrc_close" : "images/blinds48.png", "imagesrc_open_select" : "images/blindsopen48sel.png", "imagesrc_close_select" : "images/blinds48sel.png", "imagesrc_stop" : "images/blindsstop.png" },' +
+                           '{ "id" : "Irrigation",    "title" : "השקייה",         "direction" : "rtl", "imagesrc_icon" : "",                  "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" },' +
+                           '{ "id" : "HVAC",          "title" : "מיזוג",          "direction" : "rtl", "imagesrc_icon" : "",                  "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" },' +
+                           '{ "id" : "Boiler",        "title" : "דוד חשמל",       "direction" : "rtl", "imagesrc_icon" : "",                  "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" },' +
+                           '{ "id" : "Sensors",       "title" : "חיישנים",        "direction" : "rtl", "imagesrc_icon" : "",                  "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" },' +
+                           '{ "id" : "Cameras",       "title" : "מצלמות",         "direction" : "rtl", "imagesrc_icon" : "",                  "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" },' +
+                           '{ "id" : "Multimedia",    "title" : "מולטימדיה",      "direction" : "rtl", "imagesrc_icon" : "",                  "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" },' +
+                           '{ "id" : "Hardware",      "title" : "חומרה",          "direction" : "ltr", "imagesrc_icon" : "",                  "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" },' +
+                           '{ "id" : "Log",           "title" : "לוג",            "direction" : "ltr", "imagesrc_icon" : "images/log.png",    "imagesrc_open" : "", "imagesrc_close" : "", "imagesrc_open_select" : "", "imagesrc_close_select" : "", "imagesrc_stop" : "" }' +
+                         ']' +
              ', ' +
              '"devices" : ' +
-                         '{ "device" : ' +
                           '[' +
                             '{ "idx" : "1",  "type" : "Domoticz Server", "tab" : "Shades_Lights", "label" : "ויטרינה" },' +
                             '{ "idx" : "35", "type" : "Domoticz Server", "tab" : "Shades_Lights", "label" : "סלון" },' +
@@ -37,10 +32,8 @@
                             '{ "idx" : "22", "type" : "Domoticz Server", "tab" : "Irrigation",    "label" : "ממטרות צפון" },' +
                             '{ "idx" : "23", "type" : "Domoticz Server", "tab" : "Irrigation",    "label" : "טפטפות" }' +
                           ']' +
-                         '}' +
              ', ' +
              '"hardware" : ' +
-                         '{ "component" : ' +
                            '[' +
                              '{ "name" : "Domoticz Server", ' +
                                '"type" : "Domoticz Server", ' +
@@ -89,5 +82,4 @@
                                '"timeout" : 3000 ' +
                              '} ' +
                            ']' +
-                         '}' +
            '}';
