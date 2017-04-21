@@ -3,10 +3,10 @@ var myXMLconfig = JSON.parse(data);
 function onloadIntervals() {
   console.log(myXMLconfig);
   CreateHTML();
-  //CheckDeviceStatus();
+  CheckObjectStatus();
   //CheckHardwareStatus();
   //UpdateDomoticzLog();
-  //setInterval(CheckDeviceStatus, myXMLconfig.js_parameters.CheckDeviceStatusInterval);
+  //setInterval(CheckObjectStatus, myXMLconfig.js_parameters.CheckObjectStatusInterval);
   //setInterval(UpdateDomoticzLog, myXMLconfig.js_parameters.UpdateDomoticzLogInterval);
   //setInterval(CheckHardwareStatus, myXMLconfig.js_parameters.CheckHardwareStatusInterval);
 }
@@ -73,7 +73,8 @@ function CreateHTML () {
         // Create IMG for object OPEN function
         var newIMG = document.createElement("img");
         newIMG.id = "img_open_idx_" + object.id;
-        newIMG.addEventListener("click", function(){ ChangeBlindState(object.type, object.id, "OPEN", 0); }, false);
+        //newIMG.addEventListener("click", function(){ ChangeBlindState(object.type, object.id, "OPEN", 0); }, false);
+        newIMG.onchange = function(){ ChangeBlindState(object, "LEVEL", object.min); };
         newIMG.src = myXMLconfig.obj_type[obj_type_index].img_open;
         document.getElementById("div_idx_" + object.id).appendChild(newIMG);
         // Create DIV for object slider
@@ -85,13 +86,13 @@ function CreateHTML () {
         var newSlider = document.createElement("input");
         newSlider.id = "slider_idx_" + object.id;
         newSlider.setAttribute("type", "range");
-        newSlider.onchange = function(){ ChangeBlindState(object.type, object.id, "LEVEL", newSlider.value); };
+        newSlider.onchange = function(){ ChangeBlindState(object, "LEVEL", newSlider.value); };
         newSlider.setAttribute("orient", "vertical");
         document.getElementById("div_slider_idx_" + object.id).appendChild(newSlider);
         // Create IMG for object CLOSE function
         var newIMG = document.createElement("img");
         newIMG.id = "img_close_idx_" + object.id;
-        newIMG.onclick = function(){ ChangeBlindState(object.type, object.id, "CLOSE", 0); };
+        newIMG.onchange = function(){ ChangeBlindState(object, "LEVEL", object.max); };
         newIMG.src = myXMLconfig.obj_type[obj_type_index].img_close;
         document.getElementById("div_idx_" + object.id).appendChild(newIMG);
         // Create P (white space)
@@ -100,7 +101,7 @@ function CreateHTML () {
         // Create IMG for object STOP function
         var newIMG = document.createElement("img");
         newIMG.id = "img_stop_idx_" + object.id;
-        newIMG.onclick = function(){ ChangeBlindState(object.type, object.id, "STOP", 0); };
+        newIMG.onclick = function(){ ChangeBlindState(object, "STOP", 0); };
         newIMG.src = myXMLconfig.obj_type[obj_type_index].img_stop;
         document.getElementById("div_idx_" + object.id).appendChild(newIMG);
         break;
@@ -223,71 +224,71 @@ function UpdateDomoticzLog() {
   }
 }
 
+*/
 
-function CheckDeviceStatus() {
+function CheckObjectStatus() {
   console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
-  for (var i = 0; i < myXMLconfig.hardware.length; i++) {
-    //console.log(myXMLconfig.hardware[i].type);
-    switch (myXMLconfig.hardware[i].type) {
-      case "Domoticz Server" :
-        //console.log('http://' + myXMLconfig.hardware[i].ip + ':' + myXMLconfig.hardware[i].port + myXMLconfig.hardware[i].dataURL);
+
+  // Go over all defined objects and update status
+  myXMLconfig.objects.forEach(function(object) {
+    console.log(object);
+    var ctrl_type = myXMLconfig.ctrl_type[myXMLconfig.ctrl_type.findIndex(x => x.id==object.ctrl_type)];
+    var obj_type = myXMLconfig.obj_type[myXMLconfig.obj_type.findIndex(x => x.id==object.obj_type)];
+    var obj_mstr = myXMLconfig.obj_type[myXMLconfig.obj_type.findIndex(x => x.id==object.obj_type)];
+    console.log(obj_type);
+    console.log(ctrl_type);
+    
+    switch (object.ctrl_type) {
+      case "Domoticz":
         //$.getJSON(DomoticzDataURL, {format: "json"}, function(data) {DomoticzDataAnalyze(data);});
+        jsoncommand = 'http://' + ctrl_type.ip + ':' + ctrl_type.port + ctrl_type.SwitchGetURL.replace("REPLACE_IDX", object.id);
+        console.log(jsoncommand);
         $.ajax({
-          url: 'http://' + myXMLconfig.hardware[i].ip + ':' + myXMLconfig.hardware[i].port + myXMLconfig.hardware[i].dataURL,
+          url: jsoncommand,
           dataType: "json",
           async: true,
-          timeout: ((Object.keys(myXMLconfig.hardware[i].timeout).length === 0 && myXMLconfig.hardware[i].timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : myXMLconfig.hardware[i].timeout),
-          indexValue: i,
-          success: function(data) {DomoticzDeviceAnalyze(data, this.indexValue);},
-          error: function () { document.getElementById(myXMLconfig.hardware[this.indexValue].type + "_Status").style.color = "red";  }
+          timeout: ((Object.keys(ctrl_type.timeout).length === 0 && ctrl_type.timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : ctrl_type.timeout),
+          success: function(data) {ObjectDataAnalyze(data, object, obj_type);},
+          error: function () { }
         });
-      case "MKTronic LAN Relay Board" :
-        break;
-      case "Broadlink RM Bridge" :
-        break;
       default :
         break;
     }
-  }
+  });
 }
 
-
-function DomoticzDeviceAnalyze(json, i) {
-  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
-  //console.log(json);
-  for (k = 0; k < myXMLconfig.tabs.length; k++) {
-    switch(myXMLconfig.tabs[k].id) { // Create elements inside each tab according to the tab type "ID"
-      case "Shades_Lights":
-        for (j = 0; j < myXMLconfig.devices.length; j++) {
-          if (myXMLconfig.devices[j].tab == myXMLconfig.tabs[k].id) {
-            index = json.result.findIndex(x => x.id==myXMLconfig.devices[j].id);
-            //console.log(index);
-            if (index > -1) {
-              //console.log(json.result[index].Level);
-              if (json.result[index].Level < 50) {
-                //console.log("IMG_OPEN_IDX_" + myXMLconfig.devices[j].id);
-                document.getElementById("IMG_OPEN_IDX_" + myXMLconfig.devices[j].id).src = myXMLconfig.tabs[k].imagesrc_open_select;
-                document.getElementById("IMG_CLOSE_IDX_" + myXMLconfig.devices[j].id).src = myXMLconfig.tabs[k].imagesrc_close;
-              }
-              else {
-                //console.log("IMG_CLOSE_IDX_" + myXMLconfig.devices[j].id);
-                document.getElementById("IMG_OPEN_IDX_" + myXMLconfig.devices[j].id).src = myXMLconfig.tabs[k].imagesrc_open;
-                document.getElementById("IMG_CLOSE_IDX_" + myXMLconfig.devices[j].id).src = myXMLconfig.tabs[k].imagesrc_close_select;
-              }
-              document.getElementById("SLIDER_IDX_" + myXMLconfig.devices[j].id).value = 100 - json.result[index].Level;
-            }
+function ObjectDataAnalyze(data, object, obj_type) {
+  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms] - ' + data.result[0].Level + ' / ' + object.id + ' / ' + obj_type.id);
+  //console.log(data);
+  switch(object.ctrl_type) {
+    case "Domoticz":
+      switch (object.obj_type) {
+        case "Blinds_Slider":
+          if (data.result[0].Level < obj_type.open_limit) {
+            document.getElementById("img_open_idx_" + object.id).src = obj_type.img_open_select;
+            document.getElementById("img_close_idx_" + object.id).src = obj_type.img_close;
           }
-        }
-        break;
-      default:
-        break;
-    }
+          else {
+            document.getElementById("img_open_idx_" + object.id).src = obj_type.img_open;
+            if (data.result[0].Level > obj_type.close_limit)
+              document.getElementById("img_close_idx_" + object.id).src = obj_type.img_close_select;
+            else
+              document.getElementById("img_close_idx_" + object.id).src = obj_type.img_close;
+          }
+          document.getElementById("slider_idx_" + object.id).value = 100 - data.result[0].Level;
+          break;
+        default:
+          break;
+      }
+      break;
+    default:
+      break;
   }
 
   console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms] - End');
 }
 
-
+/*
 function CheckHardwareStatus() {
   console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
   for (var i = 0; i < myXMLconfig.hardware.length; i++) {
@@ -404,46 +405,49 @@ function BroadlinkRegisteredDevices(json, i) {
   }
 }
 
+*/
 
-function ChangeBlindState(type, id, command, level) {
-  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms] - ' + id + "/" + command + "/" + level);
+function ChangeBlindState(object, command, level) {
+  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms] - ' + object.id + "/" + command + "/" + level);
   var jsoncommand = "";
-  var i = myXMLconfig.hardware.findIndex(x => x.type==type);
-  var component = myXMLconfig.hardware[i];
-  console.log(component);
+  var i = myXMLconfig.ctrl_type.findIndex(x => x.id==object.ctrl_type);
+  var ctrl_type = myXMLconfig.ctrl_type[i];
+  console.log(ctrl_type);
   
   switch (command) {
-    case "OPEN":
-      jsoncommand = 'http://' + component.ip + ':' + component.port + component.SwitchOffURL.replace("REPLACE_IDX", id);
-      document.getElementById("commandline").innerHTML = jsoncommand;
-      DomoticzSendJSONCommand(jsoncommand, component);
-      break;
-    case "CLOSE":
-      jsoncommand = 'http://' + component.ip + ':' + component.port + component.SwitchOnURL.replace("REPLACE_IDX", id);
-      document.getElementById("commandline").innerHTML = jsoncommand;
-      DomoticzSendJSONCommand(jsoncommand, component);
-      break;
+    // case "OPEN":
+      // jsoncommand = 'http://' + ctrl_type.ip + ':' + ctrl_type.port + ctrl_type.SwitchOffURL.replace("REPLACE_IDX", object.id);
+      // document.getElementById("commandline").innerHTML = jsoncommand;
+      // DomoticzSendJSONCommand(jsoncommand, ctrl_type);
+      // break;
+    // case "CLOSE":
+      // jsoncommand = 'http://' + ctrl_type.ip + ':' + ctrl_type.port + ctrl_type.SwitchOnURL.replace("REPLACE_IDX", object.id);
+      // document.getElementById("commandline").innerHTML = jsoncommand;
+      // DomoticzSendJSONCommand(jsoncommand, ctrl_type);
+      // break;
     case "STOP":
-      jsoncommand = 'http://' + component.ip + ':' + component.port + component.SwitchGetURL.replace("REPLACE_IDX", id);
+      // Get current object Level
+      jsoncommand = 'http://' + ctrl_type.ip + ':' + ctrl_type.port + ctrl_type.SwitchGetURL.replace("REPLACE_IDX", object.id);
       $.ajax({
         url: jsoncommand,
         dataType: "json",
         async: true,
-        timeout: ((Object.keys(component.timeout).length === 0 && component.timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : component.timeout),
+        timeout: ((Object.keys(ctrl_type.timeout).length === 0 && ctrl_type.timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : ctrl_type.timeout),
         success: function(data) {
-                   jsoncommand = component.SwitchSetURL.replace("REPLACE_IDX", id);
-                   jsoncommand = 'http://' + component.ip + ':' + component.port + jsoncommand.replace("REPLACE_LEVEL", (data.result[0].Level));
+                   jsoncommand = ctrl_type.SwitchSetURL.replace("REPLACE_IDX", object.id);
+                   jsoncommand = 'http://' + ctrl_type.ip + ':' + ctrl_type.port + jsoncommand.replace("REPLACE_LEVEL", (data.result[0].Level));
                    document.getElementById("commandline").innerHTML = data.status + " " + data.result[0].Level + " " + jsoncommand;
-                   DomoticzSendJSONCommand(jsoncommand, component);
+                   // Set new object LEVEL to same LEVEL as reported - will stop object current place (depending on communication latency)
+                   DomoticzSendJSONCommand(jsoncommand, ctrl_type);
                  },
         error: function () { document.getElementById("commandline").innerHTML = "fail"; }
       });
       break;
     case "LEVEL":
-      jsoncommand = component.SwitchSetURL.replace("REPLACE_IDX", id);
-      jsoncommand = 'http://' + component.ip + ':' + component.port + jsoncommand.replace("REPLACE_LEVEL", (100-level));
+      jsoncommand = ctrl_type.SwitchSetURL.replace("REPLACE_IDX", object.id);
+      jsoncommand = 'http://' + ctrl_type.ip + ':' + ctrl_type.port + jsoncommand.replace("REPLACE_LEVEL", (100-level));
       document.getElementById("commandline").innerHTML = jsoncommand;
-      DomoticzSendJSONCommand(jsoncommand, component);
+      DomoticzSendJSONCommand(jsoncommand, ctrl_type);
       break;
     default:
       break;
@@ -451,14 +455,14 @@ function ChangeBlindState(type, id, command, level) {
 }
 
 
-function DomoticzSendJSONCommand(jsoncommand, component) {
+function DomoticzSendJSONCommand(jsoncommand, ctrl_type) {
   //console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
   //console.log(jsoncommand + " " + i);
   $.ajax({
     url: jsoncommand,
     dataType: "json",
     async: true,
-    timeout: ((Object.keys(component.timeout).length === 0 && component.timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : component.timeout),
+    timeout: ((Object.keys(ctrl_type.timeout).length === 0 && ctrl_type.timeout.constructor === Object) ? myXMLconfig.js_parameters.XMLHttpRequestTimeout : ctrl_type.timeout),
     success: function(data) {
                if (data.status == "OK")
                  document.getElementById("commandline").style.color = "lightgreen";
@@ -468,5 +472,3 @@ function DomoticzSendJSONCommand(jsoncommand, component) {
     error: function () { document.getElementById("commandline").style.color = "red"; }
   });
 }
-
- */

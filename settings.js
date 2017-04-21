@@ -2,7 +2,7 @@
              ' "js_parameters" : ' +
                                 '{  "CheckHardwareStatusInterval" : 30000 ' +
                                   ',"UpdateDomoticzLogInterval" : 20000 ' +
-                                  ',"CheckDeviceStatusInterval" : 3000 ' +
+                                  ',"CheckObjectStatusInterval" : 3000 ' +
                                   ',"XMLHttpRequestTimeout" : 2000' +
                                 '} ' +
              ',"tabs" : ' +
@@ -25,6 +25,8 @@
                                 ',"img_open_select" : "images/blindsopen48sel.png" ' +
                                 ',"img_close_select" : "images/blinds48sel.png" ' +
                                 ',"img_stop" : "images/blindsstop.png" ' +
+                                ',"open_limit" : "5" ' +
+                                ',"close_limit" : "95" ' +
                              ' } ' +
                              ',{ "id" : "Domoticz" ' +
                              ' } ' +
@@ -63,16 +65,16 @@
                            ']' +
              ',"objects" : ' +
                           '[' +
-                            ' { "id" : "1",  "obj_type" : "Blinds_Slider", "ctrl_type" : "Domoticz", "tab" : "Shades_Lights", "label" : "ויטרינה" }' +
-                            ',{ "id" : "35", "obj_type" : "Blinds_Slider", "ctrl_type" : "Domoticz", "tab" : "Shades_Lights", "label" : "סלון" }' +
-                            ',{ "id" : "30", "obj_type" : "Blinds_Slider", "ctrl_type" : "Domoticz", "tab" : "Shades_Lights", "label" : "חדר אוכל" }' +
-                            ',{ "id" : "63", "obj_type" : "Blinds_Slider", "ctrl_type" : "Domoticz", "tab" : "Shades_Lights", "label" : "חדר שישי" }' +
-                            ',{ "id" : "50", "obj_type" : "Blinds_Slider", "ctrl_type" : "Domoticz", "tab" : "Shades_Lights", "label" : "אלה" }' +
-                            ',{ "id" : "56", "obj_type" : "Blinds_Slider", "ctrl_type" : "Domoticz", "tab" : "Shades_Lights", "label" : "נגה צפוני" }' +
-                            ',{ "id" : "69", "obj_type" : "Blinds_Slider", "ctrl_type" : "Domoticz", "tab" : "Shades_Lights", "label" : "נגה מערבי" }' +
-                            ',{ "id" : "21", "obj_type" : "Water",         "ctrl_type" : "Domoticz", "tab" : "Irrigation",    "label" : "ממטרות מערב" }' +
-                            ',{ "id" : "22", "obj_type" : "Water",         "ctrl_type" : "Domoticz", "tab" : "Irrigation",    "label" : "ממטרות צפון" }' +
-                            ',{ "id" : "23", "obj_type" : "Water",         "ctrl_type" : "Domoticz", "tab" : "Irrigation",    "label" : "טפטפות" }' +
+                            ' { "id" : "1",  "obj_type" : "Blinds_Slider", "ctrl_type" : "Domoticz", "tab" : "Shades_Lights", "label" : "ויטרינה",     "min" : "0", "max" : "100" }' +
+                            ',{ "id" : "35", "obj_type" : "Blinds_Slider", "ctrl_type" : "Domoticz", "tab" : "Shades_Lights", "label" : "סלון",        "min" : "0", "max" : "100" }' +
+                            ',{ "id" : "30", "obj_type" : "Blinds_Slider", "ctrl_type" : "Domoticz", "tab" : "Shades_Lights", "label" : "חדר אוכל",    "min" : "0", "max" : "100" }' +
+                            ',{ "id" : "63", "obj_type" : "Blinds_Slider", "ctrl_type" : "Domoticz", "tab" : "Shades_Lights", "label" : "חדר שישי",    "min" : "0", "max" : "100" }' +
+                            ',{ "id" : "50", "obj_type" : "Blinds_Slider", "ctrl_type" : "Domoticz", "tab" : "Shades_Lights", "label" : "אלה",         "min" : "0", "max" : "100" }' +
+                            ',{ "id" : "56", "obj_type" : "Blinds_Slider", "ctrl_type" : "Domoticz", "tab" : "Shades_Lights", "label" : "נגה צפוני",   "min" : "0", "max" : "100" }' +
+                            ',{ "id" : "69", "obj_type" : "Blinds_Slider", "ctrl_type" : "Domoticz", "tab" : "Shades_Lights", "label" : "נגה מערבי",   "min" : "0", "max" : "100" }' +
+                            ',{ "id" : "21", "obj_type" : "Water",         "ctrl_type" : "Domoticz", "tab" : "Irrigation",    "label" : "ממטרות מערב", "min" : "0", "max" : "100" }' +
+                            ',{ "id" : "22", "obj_type" : "Water",         "ctrl_type" : "Domoticz", "tab" : "Irrigation",    "label" : "ממטרות צפון", "min" : "0", "max" : "100" }' +
+                            ',{ "id" : "23", "obj_type" : "Water",         "ctrl_type" : "Domoticz", "tab" : "Irrigation",    "label" : "טפטפות",      "min" : "0", "max" : "100" }' +
 
                             ',{ "id" : "", "obj_type" : "Domoticz",  "ctrl_type" : "Domoticz",  "tab" : "Hardware",   "label" : "Domoticz Server",       "ip" : "192.168.2.19",  "port" : "8080", "user" : "", "password" : ""}' +
                             ',{ "id" : "", "obj_type" : "LMS",       "ctrl_type" : "LMS",       "tab" : "Multimedia", "label" : "Logitech Media Server", "ip" : "192.168.2.117", "port" : "9000", "user" : "", "password" : ""}' +
