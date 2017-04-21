@@ -19,7 +19,7 @@
                          ']' +
              ',"obj_type" : ' +
                            '[' +
-                             ' {  "id" : "Blinds_Slider" ' +
+                             ' {  "id" : "Blinds" ' +
                                 ',"img_open" : "images/blindsopen48.png" ' + 
                                 ',"img_close" : "images/blinds48.png" ' +
                                 ',"img_open_select" : "images/blindsopen48sel.png" ' +
@@ -60,16 +60,17 @@
                                  '{ "id" : "Domoticz1", "ctrl_type" : "Domoticz", "label" : "Domoticz Server", "ip" : "192.168.2.19", "port" : "8080", "user" : "", "password" : ""' +
                                   ',"objects" : ' +
                                                 '[' +
-                                                  ' { "id" : "1",  "obj_type" : "Blinds_Slider", "tab" : "Shades_Lights", "label" : "ויטרינה",     "min" : "0", "max" : "100" }' +
-                                                  ',{ "id" : "35", "obj_type" : "Blinds_Slider", "tab" : "Shades_Lights", "label" : "סלון",        "min" : "0", "max" : "100" }' +
-                                                  ',{ "id" : "30", "obj_type" : "Blinds_Slider", "tab" : "Shades_Lights", "label" : "חדר אוכל",    "min" : "0", "max" : "100" }' +
-                                                  ',{ "id" : "63", "obj_type" : "Blinds_Slider", "tab" : "Shades_Lights", "label" : "חדר שישי",    "min" : "0", "max" : "100" }' +
-                                                  ',{ "id" : "50", "obj_type" : "Blinds_Slider", "tab" : "Shades_Lights", "label" : "אלה",         "min" : "0", "max" : "100" }' +
-                                                  ',{ "id" : "56", "obj_type" : "Blinds_Slider", "tab" : "Shades_Lights", "label" : "נגה מערבי",   "min" : "0", "max" : "100" }' +
-                                                  ',{ "id" : "69", "obj_type" : "Blinds_Slider", "tab" : "Shades_Lights", "label" : "נגה צפוני",   "min" : "0", "max" : "100" }' +
-                                                  ',{ "id" : "21", "obj_type" : "Water",         "tab" : "Irrigation",    "label" : "ממטרות מערב", "min" : "0", "max" : "100" }' +
-                                                  ',{ "id" : "22", "obj_type" : "Water",         "tab" : "Irrigation",    "label" : "ממטרות צפון", "min" : "0", "max" : "100" }' +
-                                                  ',{ "id" : "23", "obj_type" : "Water",         "tab" : "Irrigation",    "label" : "טפטפות",      "min" : "0", "max" : "100" }' +
+                                                  ' { "id" : "19", "obj_type" : "Blinds", "obj_subtype" : "Switch", "tab" : "Shades_Lights", "label" : "תריסים קומת קרקע", "min" : "0", "max" : "100" }' +
+                                                  ',{ "id" : "1",  "obj_type" : "Blinds", "obj_subtype" : "Slider", "tab" : "Shades_Lights", "label" : "ויטרינה",          "min" : "0", "max" : "100" }' +
+                                                  ',{ "id" : "35", "obj_type" : "Blinds", "obj_subtype" : "Slider", "tab" : "Shades_Lights", "label" : "סלון",             "min" : "0", "max" : "100" }' +
+                                                  ',{ "id" : "30", "obj_type" : "Blinds", "obj_subtype" : "Slider", "tab" : "Shades_Lights", "label" : "חדר אוכל",         "min" : "0", "max" : "100" }' +
+                                                  ',{ "id" : "63", "obj_type" : "Blinds", "obj_subtype" : "Slider", "tab" : "Shades_Lights", "label" : "חדר שישי",         "min" : "0", "max" : "100" }' +
+                                                  ',{ "id" : "50", "obj_type" : "Blinds", "obj_subtype" : "Slider", "tab" : "Shades_Lights", "label" : "אלה",              "min" : "0", "max" : "100" }' +
+                                                  ',{ "id" : "56", "obj_type" : "Blinds", "obj_subtype" : "Slider", "tab" : "Shades_Lights", "label" : "נגה מערבי",        "min" : "0", "max" : "100" }' +
+                                                  ',{ "id" : "69", "obj_type" : "Blinds", "obj_subtype" : "Slider", "tab" : "Shades_Lights", "label" : "נגה צפוני",        "min" : "0", "max" : "100" }' +
+                                                  ',{ "id" : "21", "obj_type" : "Water",  "obj_subtype" : "Switch", "tab" : "Irrigation",    "label" : "ממטרות מערב",      "min" : "0", "max" : "100" }' +
+                                                  ',{ "id" : "22", "obj_type" : "Water",  "obj_subtype" : "Switch", "tab" : "Irrigation",    "label" : "ממטרות צפון",      "min" : "0", "max" : "100" }' +
+                                                  ',{ "id" : "23", "obj_type" : "Water",  "obj_subtype" : "Switch", "tab" : "Irrigation",    "label" : "טפטפות",           "min" : "0", "max" : "100" }' +
                                                 ']' +
                                  '}' +
                                 ',{ "id" : "LMS1", "ctrl_type" : "LMS", "label" : "Logitech Media Server", "ip" : "192.168.2.117", "port" : "9000", "user" : "", "password" : ""' +

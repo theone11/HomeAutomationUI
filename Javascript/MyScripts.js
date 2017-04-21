@@ -58,7 +58,7 @@ function CreateHTML () {
       
       // Create object according to obj_type and in the correct tab
       switch(object.obj_type) {
-        case "Blinds_Slider":
+        case "Blinds":
           // Find the obj_type index matching the current object.obj_type
           var obj_type_index = myXMLconfig.obj_type.findIndex(x => x.id==object.obj_type);
           // Create DIV
@@ -78,36 +78,45 @@ function CreateHTML () {
           //newIMG.addEventListener("click", function(){ ChangeBlindState(controller, object, "LEVEL", object.max); }, false);
           newIMG.onclick = function(){ ChangeBlindState(controller, object, "LEVEL", object.max); };
           //newIMG.onclick = function(){ ChangeBlindState(controller, object, "OPEN", 0); };
-          newIMG.src = myXMLconfig.obj_type[obj_type_index].img_open;
+          newIMG.src = myXMLconfig.obj_type[obj_type_index].img_open_select;
           document.getElementById("div_idx_" + object.id).appendChild(newIMG);
-          // Create DIV for object slider
-          var newDIV = document.createElement("div");
-          newDIV.id = "div_slider_idx_" + object.id;
-          newDIV.className = "Slider_Container_DIV";
-          document.getElementById("div_idx_" + object.id).appendChild(newDIV);
-          // Create Slider for object
-          var newSlider = document.createElement("input");
-          newSlider.id = "slider_idx_" + object.id;
-          newSlider.setAttribute("type", "range");
-          newSlider.onchange = function(){ ChangeBlindState(controller, object, "LEVEL", newSlider.value); };
-          newSlider.setAttribute("orient", "vertical");
-          document.getElementById("div_slider_idx_" + object.id).appendChild(newSlider);
+          if (object.obj_subtype == "Slider") {
+            // Create DIV for object slider
+            var newDIV = document.createElement("div");
+            newDIV.id = "div_slider_idx_" + object.id;
+            newDIV.className = "Slider_Container_DIV";
+            document.getElementById("div_idx_" + object.id).appendChild(newDIV);
+            // Create Slider for object
+            var newSlider = document.createElement("input");
+            newSlider.id = "slider_idx_" + object.id;
+            newSlider.setAttribute("type", "range");
+            newSlider.onchange = function(){ ChangeBlindState(controller, object, "LEVEL", newSlider.value); };
+            newSlider.setAttribute("orient", "vertical");
+            document.getElementById("div_slider_idx_" + object.id).appendChild(newSlider);
+          }
+          else {
+            // Create P (white space)
+            var newP = document.createElement("p");
+            document.getElementById("div_idx_" + object.id).appendChild(newP);
+          }
           // Create IMG for object CLOSE function
           var newIMG = document.createElement("img");
           newIMG.id = "img_close_idx_" + object.id;
           newIMG.onclick = function(){ ChangeBlindState(controller, object, "LEVEL", object.min); };
           //newIMG.onclick = function(){ ChangeBlindState(controller, object, "CLOSE", 0); };
-          newIMG.src = myXMLconfig.obj_type[obj_type_index].img_close;
+          newIMG.src = myXMLconfig.obj_type[obj_type_index].img_close_select;
           document.getElementById("div_idx_" + object.id).appendChild(newIMG);
           // Create P (white space)
           var newP = document.createElement("p");
           document.getElementById("div_idx_" + object.id).appendChild(newP);
-          // Create IMG for object STOP function
-          var newIMG = document.createElement("img");
-          newIMG.id = "img_stop_idx_" + object.id;
-          newIMG.onclick = function(){ ChangeBlindState(controller, object, "STOP", 0); };
-          newIMG.src = myXMLconfig.obj_type[obj_type_index].img_stop;
-          document.getElementById("div_idx_" + object.id).appendChild(newIMG);
+          if (object.obj_subtype == "Slider") {
+            // Create IMG for object STOP function
+            var newIMG = document.createElement("img");
+            newIMG.id = "img_stop_idx_" + object.id;
+            newIMG.onclick = function(){ ChangeBlindState(controller, object, "STOP", 0); };
+            newIMG.src = myXMLconfig.obj_type[obj_type_index].img_stop;
+            document.getElementById("div_idx_" + object.id).appendChild(newIMG);
+          }
           break;
 
 /*     case "Hardware":
@@ -232,7 +241,7 @@ function UpdateDomoticzLog() {
 */
 
 function CheckObjectsStatus() {
-  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
+  //console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms]');
   // Go over all defined objects and update status
   myXMLconfig.controllers.forEach(function(controller) {
     controller.objects.forEach(function(object) {
@@ -257,7 +266,7 @@ function CheckObjectsStatus() {
       }
     });
   });
-  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms] - End');
+  //console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms] - End');
 }
 
 function ObjectDataAnalyze(data, controller, object, obj_type) {
@@ -265,31 +274,33 @@ function ObjectDataAnalyze(data, controller, object, obj_type) {
   switch(controller.ctrl_type) {
     case "Domoticz":
       switch (object.obj_type) {
-        case "Blinds_Slider":
-          if (data.result[0].Status == "Open") {
-            document.getElementById("img_open_idx_" + object.id).src = obj_type.img_open_select;
-            document.getElementById("img_close_idx_" + object.id).src = obj_type.img_close;
-          }
-          else {
-            document.getElementById("img_open_idx_" + object.id).src = obj_type.img_open;
-            if (data.result[0].Status == "Closed")
-              document.getElementById("img_close_idx_" + object.id).src = obj_type.img_close_select;
-            else
+        case "Blinds":
+          if (object.obj_subtype == "Slider") {
+            if (data.result[0].Status == "Open") {
+              document.getElementById("img_open_idx_" + object.id).src = obj_type.img_open_select;
               document.getElementById("img_close_idx_" + object.id).src = obj_type.img_close;
-          }
-/*           else {
-            if (data.result[0].Level > obj_type.open_limit) {
-            document.getElementById("img_open_idx_" + object.id).src = obj_type.img_open_select;
-            document.getElementById("img_close_idx_" + object.id).src = obj_type.img_close;
-          }
-          else {
-            document.getElementById("img_open_idx_" + object.id).src = obj_type.img_open;
-            if (data.result[0].Level < obj_type.close_limit)
-              document.getElementById("img_close_idx_" + object.id).src = obj_type.img_close_select;
-            else
+            }
+            else {
+              document.getElementById("img_open_idx_" + object.id).src = obj_type.img_open;
+              if (data.result[0].Status == "Closed")
+                document.getElementById("img_close_idx_" + object.id).src = obj_type.img_close_select;
+              else
+                document.getElementById("img_close_idx_" + object.id).src = obj_type.img_close;
+            }
+  /*           else {
+              if (data.result[0].Level > obj_type.open_limit) {
+              document.getElementById("img_open_idx_" + object.id).src = obj_type.img_open_select;
               document.getElementById("img_close_idx_" + object.id).src = obj_type.img_close;
-          } */
-          document.getElementById("slider_idx_" + object.id).value = object.max - data.result[0].Level;
+            }
+            else {
+              document.getElementById("img_open_idx_" + object.id).src = obj_type.img_open;
+              if (data.result[0].Level < obj_type.close_limit)
+                document.getElementById("img_close_idx_" + object.id).src = obj_type.img_close_select;
+              else
+                document.getElementById("img_close_idx_" + object.id).src = obj_type.img_close;
+            } */
+            document.getElementById("slider_idx_" + object.id).value = object.max - data.result[0].Level;
+          }
           break;
         default:
           break;
@@ -421,8 +432,7 @@ function BroadlinkRegisteredDevices(json, i) {
 */
 
 function ChangeBlindState(controller, object, command, level) {
-  console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms] - ' + object.id + "/" + command + "/" + level);
-  var jsoncommand = "";
+  //console.log(arguments.callee.name + ' - ' + Math.round(new Date().getTime()) + ' [ms] - ' + object.id + "/" + command + "/" + level);
   var ctrl_type = myXMLconfig.ctrl_type[myXMLconfig.ctrl_type.findIndex(x => x.id==controller.ctrl_type)];
   //console.log(ctrl_type);
   
@@ -440,7 +450,7 @@ function ChangeBlindState(controller, object, command, level) {
     case "STOP":
       // Get current object Level
       jsoncommand = 'http://' + controller.ip + ':' + controller.port + ctrl_type.SwitchGetURL.replace("REPLACE_IDX", object.id);
-      console.log(jsoncommand);
+      //console.log(jsoncommand);
       $.ajax({
         url: jsoncommand,
         dataType: "json",
@@ -461,7 +471,7 @@ function ChangeBlindState(controller, object, command, level) {
       jsoncommand = ctrl_type.SwitchSetURL.replace("REPLACE_IDX", object.id);
       jsoncommand = 'http://' + controller.ip + ':' + controller.port + jsoncommand.replace("REPLACE_LEVEL", (object.max - level));
       document.getElementById("commandline").innerHTML = "Setting " + object.id + " level to " + level;
-      console.log(jsoncommand);
+      //console.log(jsoncommand);
       DomoticzSendJSONCommand(jsoncommand, ctrl_type);
       break;
     default:
